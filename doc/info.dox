@@ -1,0 +1,5 @@
+/** \mainpage realsense-rgbd-slam API Documentation
+
+<b>realsense-rgbd-slam</b> is SLAM for the realsense D415 or any other rgbd sensor.
+
+*/
