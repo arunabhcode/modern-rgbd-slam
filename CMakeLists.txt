@@ -4,11 +4,12 @@ project(realsense-rgbd-slam LANGUAGES CXX)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+set(CMAKE_CXX_STANDARD 14)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-  set(COMPILE_FLAGS "-W -Wall -Werror -fsigned-char -freg-struct-return
-  -Wextra -Wpointer-arith -Wcast-qual -Wshadow -Wpedantic")
-  add_compile_options(${COMPILE_FLAGS})
+  set(COMPILE_FLAGS "-W;-Wall;-Werror;-fsigned-char;-freg-struct-return;"
+    "-Wextra;-Wpointer-arith;-Wcast-qual;-Wshadow;-Wpedantic")
+  add_compile_options("${COMPILE_FLAGS}")
 endif()
 
 if(NOT TARGET uninstall)
@@ -30,7 +31,7 @@ file(WRITE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
     "include(CMakeFindDependencyMacro)\n"
     "include(\${CMAKE_CURRENT_LIST_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)\n")
 
-add_subdirectory(modules)
+# add_subdirectory(modules)
 add_subdirectory(apps)
 add_subdirectory(doc)
 
