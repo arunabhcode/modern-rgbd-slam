@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(COMPILE_FLAGS "-W;-Wall;-Werror;-fsigned-char;-freg-struct-return;"
-    "-Wextra;-Wpointer-arith;-Wcast-qual;-Wshadow;-Wpedantic;-ggdb")
+    "-Wextra;-Wpointer-arith;-Wcast-qual;-Wshadow;"
+    "-Wpedantic;-ggdb;-march=native")
   add_compile_options("${COMPILE_FLAGS}")
 endif()
 

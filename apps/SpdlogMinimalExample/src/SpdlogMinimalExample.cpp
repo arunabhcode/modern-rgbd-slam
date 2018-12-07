@@ -1,8 +1,5 @@
 // Copyright 2018 Arunabh Sharma
 
-#include <iostream>
-#include <string>
-
 #include "spdlog/spdlog.h"
 
 int main()
