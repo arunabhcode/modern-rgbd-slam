@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(RealsenseMinimalExample)
+project(SophusMinimalExample)
 
-find_package(realsense2 REQUIRED)
+find_package(Sophus REQUIRED)
 
-set(PROJECT_SRCS ${PROJECT_SOURCE_DIR}/src/RealsenseMinimalExample.cpp)
+set(PROJECT_SRCS ${PROJECT_SOURCE_DIR}/src/SophusMinimalExample.cpp)
 
 source_group("src" FILES ${PROJECT_SRCS})
 
 add_executable(${PROJECT_NAME} ${PROJECT_SRCS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC realsense2::realsense2)
+target_link_libraries(${PROJECT_NAME} PUBLIC Sophus::Sophus)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${CMAKE_PROJECT_NAME}/apps)
 

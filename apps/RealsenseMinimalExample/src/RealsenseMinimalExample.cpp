@@ -18,5 +18,9 @@ int main()
     {
         std::cout << "Device : " << list[0] << std::endl;
     }
+    else
+    {
+	std::cout << "No devices connected" << std::endl;
+    }	
     return 0;
 }
