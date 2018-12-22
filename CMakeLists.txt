@@ -7,10 +7,10 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_CXX_STANDARD 14)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-  set(COMPILE_FLAGS "-W;-Wall;-Werror;-fsigned-char;-freg-struct-return;"
+  set(COMPILE_FLAGS "-W;-Wall;-fsigned-char;-freg-struct-return;"
     "-Wextra;-Wpointer-arith;-Wcast-qual;-Wshadow;"
     "-Wpedantic;-ggdb;-march=native")
-  # add_compile_options("${COMPILE_FLAGS}")
+  add_compile_options("${COMPILE_FLAGS}")
 endif()
 
 if(NOT TARGET uninstall)

@@ -1,0 +1,15 @@
+{
+   "nfeatures"                 : 10000,
+   "scale_factor"              : 1.2,
+   "nlevels"                   : 8,
+   "edge_threshold"            : 31,
+   "first_level"               : 0,
+   "WTA_K"                     : 2,
+   "score_type"                : 0,
+   "patch_size"                : 31,
+   "fast_threshold"            : 0,
+   "with_rotation"             : true,
+   "with_scale"                : true,
+   "threshold_factor"          : 10.0,
+   "show_debug"                : "ALL"
+}
