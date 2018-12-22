@@ -18,18 +18,18 @@ Feature::Feature(const std::string show_debug)
 
 void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
                                           const cv::Mat& img2,
-                                          int nfeatures,
-                                          float scale_factor,
-                                          int nlevels,
-                                          int edge_threshold,
-                                          int first_level,
-                                          int WTA_K,
-                                          cv::ORB::ScoreType score_type,
-                                          int patch_size,
-                                          int fast_threshold,
-                                          bool with_rotation,
-                                          bool with_scale,
-                                          float threshold_factor,
+                                          const int nfeatures,
+                                          const float scale_factor,
+                                          const int nlevels,
+                                          const int edge_threshold,
+                                          const int first_level,
+                                          const int WTA_K,
+                                          const cv::ORB::ScoreType score_type,
+                                          const int patch_size,
+                                          const int fast_threshold,
+                                          const bool with_rotation,
+                                          const bool with_scale,
+                                          const float threshold_factor,
                                           std::vector<cv::Point2f>& pts1,
                                           std::vector<cv::Point2f>& pts2)
 {
@@ -51,19 +51,6 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
 
   orb_inst->detectAndCompute(img1, cv::noArray(), keypoints_1, descriptors_1);
   orb_inst->detectAndCompute(img2, cv::noArray(), keypoints_2, descriptors_2);
-
-  // cv::Ptr<cv::Feature2D> extractor = cv::ORB::create(nfeatures,
-  //                                                    scaleFactor,
-  //                                                    nlevels,
-  //                                                    edgeThreshold,
-  //                                                    firstLevel,
-  //                                                    WTA_K,
-  //                                                    scoreType,
-  //                                                    patchSize,
-  //                                                    fastThreshold);
-
-  // extractor->compute(img1, keypoints_1, descriptors_1);
-  // extractor->compute(img2, keypoints_2, descriptors_2);
 
   std::vector<cv::DMatch> matches12;
   std::vector<cv::DMatch> good_matches;
