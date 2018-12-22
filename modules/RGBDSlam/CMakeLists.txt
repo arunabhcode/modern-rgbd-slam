@@ -14,6 +14,7 @@ source_group("include" FILES ${PROJECT_INCS})
 source_group("src"     FILES ${PROJECT_SRCS})
 
 find_package(OpenCV REQUIRED)
+find_package(spdlog REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED ${PROJECT_SRCS} ${PROJECT_INCS})
 
@@ -23,7 +24,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME}
                       ${OpenCV_LIBS}
-                      )
+                      spdlog::spdlog)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${CMAKE_PROJECT_NAME}Targets

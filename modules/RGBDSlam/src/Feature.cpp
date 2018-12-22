@@ -1,0 +1,105 @@
+// Copyright 2018 Arunabh Sharma
+
+#include "Room/RGBDSlam/Feature.h"
+
+#include <string>
+#include <vector>
+
+#include "opencv2/opencv.hpp"
+#include "opencv2/xfeatures2d.hpp"
+#include "spdlog/spdlog.h"
+
+namespace room
+{
+Feature::Feature(const std::string show_debug)
+{
+  m_show_debug = show_debug;
+}
+
+void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
+                                          const cv::Mat& img2,
+                                          int nfeatures,
+                                          float scale_factor,
+                                          int nlevels,
+                                          int edge_threshold,
+                                          int first_level,
+                                          int WTA_K,
+                                          cv::ORB::ScoreType score_type,
+                                          int patch_size,
+                                          int fast_threshold,
+                                          bool with_rotation,
+                                          bool with_scale,
+                                          float threshold_factor,
+                                          std::vector<cv::Point2f>& pts1,
+                                          std::vector<cv::Point2f>& pts2)
+{
+  std::vector<cv::KeyPoint> keypoints_1;
+  std::vector<cv::KeyPoint> keypoints_2;
+  std::vector<cv::KeyPoint> keypoints_match_1;
+  std::vector<cv::KeyPoint> keypoints_match_2;
+  cv::Mat descriptors_1;
+  cv::Mat descriptors_2;
+  cv::Ptr<cv::Feature2D> orb_inst = cv::ORB::create(nfeatures,
+                                                    scale_factor,
+                                                    nlevels,
+                                                    edge_threshold,
+                                                    first_level,
+                                                    WTA_K,
+                                                    score_type,
+                                                    patch_size,
+                                                    fast_threshold);
+
+  orb_inst->detectAndCompute(img1, cv::noArray(), keypoints_1, descriptors_1);
+  orb_inst->detectAndCompute(img2, cv::noArray(), keypoints_2, descriptors_2);
+
+  // cv::Ptr<cv::Feature2D> extractor = cv::ORB::create(nfeatures,
+  //                                                    scaleFactor,
+  //                                                    nlevels,
+  //                                                    edgeThreshold,
+  //                                                    firstLevel,
+  //                                                    WTA_K,
+  //                                                    scoreType,
+  //                                                    patchSize,
+  //                                                    fastThreshold);
+
+  // extractor->compute(img1, keypoints_1, descriptors_1);
+  // extractor->compute(img2, keypoints_2, descriptors_2);
+
+  std::vector<cv::DMatch> matches12;
+  std::vector<cv::DMatch> good_matches;
+
+  cv::Ptr<cv::DescriptorMatcher> matcher =
+      cv::DescriptorMatcher::create("BruteForce-Hamming");
+  matcher->match(descriptors_1, descriptors_2, matches12);
+
+  cv::xfeatures2d::matchGMS(img1.size(),
+                            img2.size(),
+                            keypoints_1,
+                            keypoints_2,
+                            matches12,
+                            good_matches,
+                            with_rotation,
+                            with_scale,
+                            threshold_factor);
+
+  cv::Mat img_matches;
+  cv::drawMatches(img1,
+                  keypoints_1,
+                  img2,
+                  keypoints_2,
+                  good_matches,
+                  img_matches,
+                  cv::Scalar::all(-1),
+                  cv::Scalar::all(-1),
+                  std::vector<char>(),
+                  cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+
+  if (m_show_debug == "ALL" || m_show_debug == "ORB_MATCHES")
+  {
+    spdlog::info("Displaying the matches on screen");
+    cv::imshow("MatchesORB", img_matches);
+    cv::waitKey(0);
+    cv::destroyAllWindows();
+  }
+}
+}  // namespace room
