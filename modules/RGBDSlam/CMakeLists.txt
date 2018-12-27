@@ -4,10 +4,12 @@ project(room_rgbdslam)
 
 set(PROJECT_SRCS
 ${PROJECT_SOURCE_DIR}/src/Feature.cpp
+${PROJECT_SOURCE_DIR}/src/Odometry.cpp
 )
 
 set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
 )
 
 source_group("include" FILES ${PROJECT_INCS})

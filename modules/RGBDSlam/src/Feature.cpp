@@ -11,9 +11,8 @@
 
 namespace room
 {
-Feature::Feature(const std::string show_debug)
+Feature::Feature(const std::string show_debug) : m_show_debug(show_debug)
 {
-  m_show_debug = show_debug;
 }
 
 void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,

@@ -1,0 +1,8 @@
+TO DO:
+
+IMPROVEMENTS
+- Homogenize the feature detection or the feature detection based on what works better.
+
+FEATURE IMPLEMENTATION
+- Tracking and initial map formation
+- Local BA
