@@ -5,16 +5,19 @@ project(room_rgbdslam)
 set(PROJECT_SRCS
 ${PROJECT_SOURCE_DIR}/src/Feature.cpp
 ${PROJECT_SOURCE_DIR}/src/Odometry.cpp
+${PROJECT_SOURCE_DIR}/src/ReprojICP.cpp
 )
 
 set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ReprojICP.h
 )
 
 source_group("include" FILES ${PROJECT_INCS})
 source_group("src"     FILES ${PROJECT_SRCS})
 
+find_package(Ceres REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(spdlog REQUIRED)
 
@@ -26,7 +29,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME}
                       ${OpenCV_LIBS}
-                      spdlog::spdlog)
+                      spdlog::spdlog
+                      ceres)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${CMAKE_PROJECT_NAME}Targets

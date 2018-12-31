@@ -2,7 +2,16 @@ TO DO:
 
 IMPROVEMENTS
 - Homogenize the feature detection or the feature detection based on what works better.
+- Make the transform finding into a factory pattern
+
 
 FEATURE IMPLEMENTATION
 - Tracking and initial map formation
 - Local BA
+
+POSSIBILITIES FOR TRANSFORM FINDING
+- Plain ICP
+- Plain + Color ICP(Steinbrucker et al)
+- Zhang ICP(I suspect this is a deconstructed version of ICP which scales for even just cameras)
+- GICP
+- GICP6D
