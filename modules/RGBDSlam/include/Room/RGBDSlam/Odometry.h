@@ -13,6 +13,7 @@ namespace room
 class Odometry
 {
  public:
+  Odometry() = delete;
   explicit Odometry(const std::string show_debug);
   ~Odometry() = default;
 

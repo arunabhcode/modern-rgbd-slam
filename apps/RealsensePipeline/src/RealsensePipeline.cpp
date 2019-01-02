@@ -50,7 +50,6 @@ int main(int argc, char* argv[])
   depth0 = depth0 / 5000;
   depth1.convertTo(depth1, CV_32FC1);
   depth1 = depth1 / 5000;
-  spdlog::info("depth image size = {} x {}", depth0.cols, depth0.rows);
   // return 0;
   // Hardcode intrinsics for now
 
@@ -109,14 +108,15 @@ int main(int argc, char* argv[])
                                 output_R,
                                 output_t);
 
-  cv::Mat debug_R, debug_t;
-  odometry_inst.RtEstimationEssential(pts0, pts1, focal, pp, debug_R, debug_t);
+  spdlog::info("Output R = \n {}", output_R);
+  spdlog::info("Output t = \n {}", output_t);
 
-  spdlog::info("Output R = {}", output_R);
-  spdlog::info("Output t = {}", output_t);
+  // cv::Mat debug_R, debug_t;
+  // odometry_inst.RtEstimationEssential(pts0, pts1, focal, pp, debug_R,
+  // debug_t);
 
-  spdlog::info("Debug R = {}", debug_R);
-  spdlog::info("Debug t = {}", debug_t);
+  // spdlog::info("Debug R = {}", debug_R);
+  // spdlog::info("Debug t = {}", debug_t);
 
   return 0;
 }

@@ -75,18 +75,12 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
 
   for (std::size_t i = 0; i < pts0.size(); i++)
   {
-    // spdlog::debug("pts0 x, y = {}, {}",
-    //               static_cast<int>(pts0[i].x),
-    //               static_cast<int>(pts0[i].y));
     float pt0_Z = depth0.at<float>(static_cast<int>(pts0[i].y),
                                    static_cast<int>(pts0[i].x));
     Eigen::Vector3f pt0_3d((pts0[i].x - pp.x) / focal * pt0_Z,
                            (pts0[i].y - pp.y) / focal * pt0_Z,
                            pt0_Z);
 
-    // spdlog::debug("pts1 x, y = {}, {}",
-    //               static_cast<int>(pts1[i].x),
-    //               static_cast<int>(pts1[i].y));
     float pt1_Z = depth1.at<float>(static_cast<int>(pts1[i].y),
                                    static_cast<int>(pts1[i].x));
 

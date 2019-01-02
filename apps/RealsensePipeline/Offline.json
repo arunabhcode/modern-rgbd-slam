@@ -10,7 +10,7 @@
    "fast_threshold"            : 0,
    "with_rotation"             : true,
    "with_scale"                : true,
-   "threshold_factor"          : 10.0,
-   "num_points"                : 3000,
+   "threshold_factor"          : 6.0,
+   "num_points"                : 1000,
    "show_debug"                : "ALL"
 }

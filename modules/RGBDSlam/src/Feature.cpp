@@ -54,11 +54,8 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
   orb_inst->detect(img1, keypoints_1);
   orb_inst->detect(img2, keypoints_2);
 
-  kps_sub_1 = BrownANMS(keypoints_1, num_points);
-  kps_sub_2 = BrownANMS(keypoints_2, num_points);
-
-  // kps_sub_1 = keypoints_1;
-  // kps_sub_2 = keypoints_2;
+  kps_sub_1 = ANMS(keypoints_1, num_points);
+  kps_sub_2 = ANMS(keypoints_2, num_points);
 
   orb_inst->compute(img1, kps_sub_1, descriptors_1);
   orb_inst->compute(img2, kps_sub_2, descriptors_2);
@@ -91,29 +88,19 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
   cv::KeyPoint::convert(kps_sub_1, pts1, kp1_idxs);
   cv::KeyPoint::convert(kps_sub_2, pts2, kp2_idxs);
 
-  // spdlog::info(
-  //     "pts size = {}, keypoint idxs = {}, matches size = {}, keypoint 1 size
-  //     = "
-  //     "{}",
-  //     pts1.size(),
-  //     kp1_idxs.size(),
-  //     good_matches.size(),
-  //     kps_sub_1.size());
-
-  cv::Mat img_matches;
-  cv::drawMatches(img1,
-                  kps_sub_1,
-                  img2,
-                  kps_sub_2,
-                  good_matches,
-                  img_matches,
-                  cv::Scalar::all(-1),
-                  cv::Scalar::all(-1),
-                  std::vector<char>(),
-                  cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
-
   if (m_show_debug == "ALL" || m_show_debug == "ORB_MATCHES")
   {
+    cv::Mat img_matches;
+    cv::drawMatches(img1,
+                    kps_sub_1,
+                    img2,
+                    kps_sub_2,
+                    good_matches,
+                    img_matches,
+                    cv::Scalar::all(-1),
+                    cv::Scalar::all(-1),
+                    std::vector<char>(),
+                    cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
     spdlog::info("Displaying the matches on screen");
     cv::imshow("MatchesORB", img_matches);
     cv::waitKey(0);
@@ -121,23 +108,23 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
   }
 }
 
-std::vector<cv::KeyPoint> Feature::BrownANMS(
-    std::vector<cv::KeyPoint> keypoints, int num_points)
+std::vector<cv::KeyPoint> Feature::ANMS(std::vector<cv::KeyPoint> keypoints,
+                                        int num_points)
 {
   std::vector<std::pair<float, int>> results;
   results.push_back(std::make_pair(FLT_MAX, 0));
   for (std::size_t i = 1; i < keypoints.size(); ++i)
   {  // for every keypoint we get the min distance to the previously visited
      // keypoints
-    float minDist = FLT_MAX;
+    float min_dist = FLT_MAX;
     for (std::size_t j = 0; j < i; ++j)
     {
-      float exp1    = (keypoints[j].pt.x - keypoints[i].pt.x);
-      float exp2    = (keypoints[j].pt.y - keypoints[i].pt.y);
-      float curDist = std::sqrt(exp1 * exp1 + exp2 * exp2);
-      minDist       = std::min(curDist, minDist);
+      float exp1     = (keypoints[j].pt.x - keypoints[i].pt.x);
+      float exp2     = (keypoints[j].pt.y - keypoints[i].pt.y);
+      float cur_dist = std::sqrt(exp1 * exp1 + exp2 * exp2);
+      min_dist       = std::min(cur_dist, min_dist);
     }
-    results.push_back(std::make_pair(minDist, i));
+    results.push_back(std::make_pair(min_dist, i));
   }
   std::sort(results.begin(),
             results.end(),

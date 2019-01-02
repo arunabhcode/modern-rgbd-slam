@@ -13,6 +13,7 @@ namespace room
 class Feature
 {
  public:
+  Feature() = delete;
   explicit Feature(const std::string show_debug);
   ~Feature() = default;
 
@@ -34,8 +35,8 @@ class Feature
                                    std::vector<cv::Point2f>& pts1,
                                    std::vector<cv::Point2f>& pts2);
 
-  std::vector<cv::KeyPoint> BrownANMS(std::vector<cv::KeyPoint> keypoints,
-                                      int num_points);
+  std::vector<cv::KeyPoint> ANMS(std::vector<cv::KeyPoint> keypoints,
+                                 int num_points);
 
  private:
   std::string m_show_debug;
