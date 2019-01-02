@@ -107,6 +107,7 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
 
   spdlog::info("Ceres to start solving");
   ceres::Solver::Options options;
+  options.minimizer_progress_to_stdout = true;
   ceres::Solver::Summary summary;
   ceres::Solve(options, &problem, &summary);
   spdlog::info("Ceres summary = {}", summary.BriefReport());

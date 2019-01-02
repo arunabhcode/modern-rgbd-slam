@@ -70,6 +70,7 @@ int main(int argc, char* argv[])
   bool with_rotation     = json_inst["with_rotation"];
   bool with_scale        = json_inst["with_scale"];
   float threshold_factor = json_inst["threshold_factor"];
+  float num_points       = json_inst["num_points"];
   std::string show_debug = json_inst["show_debug"];
 
   std::vector<cv::Point2f> pts0;
@@ -92,6 +93,7 @@ int main(int argc, char* argv[])
                                            with_rotation,
                                            with_scale,
                                            threshold_factor,
+                                           num_points,
                                            pts0,
                                            pts1);
 

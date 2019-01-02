@@ -30,6 +30,7 @@ class Feature
                                    const bool with_rotation,
                                    const bool with_scale,
                                    const float threshold_factor,
+                                   const int num_points,
                                    std::vector<cv::Point2f>& pts1,
                                    std::vector<cv::Point2f>& pts2);
 

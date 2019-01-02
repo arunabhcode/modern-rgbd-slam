@@ -29,6 +29,7 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
                                           const bool with_rotation,
                                           const bool with_scale,
                                           const float threshold_factor,
+                                          const int num_points,
                                           std::vector<cv::Point2f>& pts1,
                                           std::vector<cv::Point2f>& pts2)
 {
@@ -53,8 +54,8 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
   orb_inst->detect(img1, keypoints_1);
   orb_inst->detect(img2, keypoints_2);
 
-  kps_sub_1 = BrownANMS(keypoints_1, 3000);
-  kps_sub_2 = BrownANMS(keypoints_2, 3000);
+  kps_sub_1 = BrownANMS(keypoints_1, num_points);
+  kps_sub_2 = BrownANMS(keypoints_2, num_points);
 
   // kps_sub_1 = keypoints_1;
   // kps_sub_2 = keypoints_2;
