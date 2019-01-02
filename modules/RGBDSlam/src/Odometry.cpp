@@ -10,6 +10,7 @@
 #include "Eigen/Core"
 #include "ceres/ceres.h"
 #include "opencv2/opencv.hpp"
+#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
 #include "Room/RGBDSlam/ReprojICP.h"
@@ -32,8 +33,8 @@ void Odometry::RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
   cv::recoverPose(E, pts1, pts2, R, t, focal, pp, mask);  // R is from 1 to 2
 }
 
-void Odometry::RtEstimationICP(const std::vector<cv::Point>& pts0,
-                               const std::vector<cv::Point>& pts1,
+void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
+                               const std::vector<cv::Point2f>& pts1,
                                const cv::Mat& color0,
                                const cv::Mat& color1,
                                const cv::Mat& depth0,
@@ -43,16 +44,28 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point>& pts0,
                                cv::Mat& R,
                                cv::Mat& t)
 {
+  if (pts0.size() != pts1.size())
+  {
+    spdlog::warn("The size of correspondence vectors does not match");
+  }
+  else
+  {
+    spdlog::info("Size of correspondence vectors = {}", pts0.size());
+  }
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
   std::unique_ptr<double[]> extrinsics(new double[6]);
-  cv::Mat R_init(3, 3, CV_64FC1, cv::Scalar(0.0));
-  cv::Mat r_init(3, 1, CV_64FC1, cv::Scalar(0.0));
+  cv::Mat R_init = cv::Mat::eye(3, 3, CV_64FC1);
+  cv::Mat r_init;
   cv::Rodrigues(R_init, r_init);
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   cv::Mat R_decode(3, 3, CV_64FC1, cv::Scalar(0.0));
   cv::Mat r_decode(3, 1, CV_64FC1, cv::Scalar(0.0));
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   cv::Mat t_init(1, 3, CV_64FC1, cv::Scalar(0.0));
   cv::Mat t_decode(1, 3, CV_64FC1, cv::Scalar(0.0));
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   extrinsics[0] = r_init.at<double>(0, 0);
   extrinsics[1] = r_init.at<double>(1, 0);
@@ -61,16 +74,28 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point>& pts0,
   extrinsics[4] = t_init.at<double>(0, 1);
   extrinsics[5] = t_init.at<double>(0, 2);
 
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
+
   ceres::Problem problem;
   std::vector<ceres::ResidualBlockId> all_res_blk_ids;
 
   for (std::size_t i = 0; i < pts0.size(); i++)
   {
-    float pt0_Z = depth0.at<float>(pts0[i].x, pts0[i].y);
+    // spdlog::debug("pts0 x, y = {}, {}",
+    //               static_cast<int>(pts0[i].x),
+    //               static_cast<int>(pts0[i].y));
+    float pt0_Z = depth0.at<float>(static_cast<int>(pts0[i].y),
+                                   static_cast<int>(pts0[i].x));
     Eigen::Vector3f pt0_3d((pts0[i].x - pp.x) / focal * pt0_Z,
                            (pts0[i].y - pp.y) / focal * pt0_Z,
                            pt0_Z);
-    float pt1_Z = depth1.at<float>(pts1[i].x, pts1[i].y);
+
+    // spdlog::debug("pts1 x, y = {}, {}",
+    //               static_cast<int>(pts1[i].x),
+    //               static_cast<int>(pts1[i].y));
+    float pt1_Z = depth1.at<float>(static_cast<int>(pts1[i].y),
+                                   static_cast<int>(pts1[i].x));
+
     Eigen::Vector3f pt1_3d((pts1[i].x - pp.x) / focal * pt1_Z,
                            (pts1[i].y - pp.y) / focal * pt1_Z,
                            pt1_Z);
@@ -85,12 +110,15 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point>& pts0,
     all_res_blk_ids.emplace_back(problem.AddResidualBlock(
         cost_function, loss_function, extrinsics.get()));
   }
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
-  spdlog::info("Ceres to start solving text");
+  spdlog::info("Ceres to start solving");
   ceres::Solver::Options options;
   ceres::Solver::Summary summary;
   ceres::Solve(options, &problem, &summary);
-  spdlog::info("Ceres finished");
+  spdlog::info("Ceres summary = {}", summary.BriefReport());
+  spdlog::info("Ceres finished solving");
+  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   r_decode.at<double>(0, 0) = extrinsics[0];
   r_decode.at<double>(1, 0) = extrinsics[1];

@@ -68,6 +68,26 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
                             with_scale,
                             threshold_factor);
 
+  std::vector<int> kp1_idxs;
+  std::vector<int> kp2_idxs;
+  for (std::size_t i = 0; i < good_matches.size(); i++)
+  {
+    kp1_idxs.push_back(good_matches[i].trainIdx);
+    kp2_idxs.push_back(good_matches[i].queryIdx);
+  }
+
+  cv::KeyPoint::convert(keypoints_1, pts1, kp1_idxs);
+  cv::KeyPoint::convert(keypoints_2, pts2, kp2_idxs);
+
+  // spdlog::info(
+  //     "pts size = {}, keypoint idxs = {}, matches size = {}, keypoint 1 size
+  //     = "
+  //     "{}",
+  //     pts1.size(),
+  //     kp1_idxs.size(),
+  //     good_matches.size(),
+  //     keypoints_1.size());
+
   cv::Mat img_matches;
   cv::drawMatches(img1,
                   keypoints_1,

@@ -36,8 +36,8 @@ class Odometry
    * @param      R       { parameter_description }
    * @param      t       { parameter_description }
    */
-  void RtEstimationICP(const std::vector<cv::Point>& pts0,
-                       const std::vector<cv::Point>& pts1,
+  void RtEstimationICP(const std::vector<cv::Point2f>& pts0,
+                       const std::vector<cv::Point2f>& pts1,
                        const cv::Mat& color0,
                        const cv::Mat& color1,
                        const cv::Mat& depth0,

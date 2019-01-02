@@ -10,7 +10,7 @@ ${PROJECT_SOURCE_DIR}/src/ReprojICP.cpp
 
 set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ReprojICP.h
 )
 
