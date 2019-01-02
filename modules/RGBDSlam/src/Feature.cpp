@@ -34,6 +34,8 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
 {
   std::vector<cv::KeyPoint> keypoints_1;
   std::vector<cv::KeyPoint> keypoints_2;
+  std::vector<cv::KeyPoint> kps_sub_1;
+  std::vector<cv::KeyPoint> kps_sub_2;
   std::vector<cv::KeyPoint> keypoints_match_1;
   std::vector<cv::KeyPoint> keypoints_match_2;
   cv::Mat descriptors_1;
@@ -48,8 +50,17 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
                                                     patch_size,
                                                     fast_threshold);
 
-  orb_inst->detectAndCompute(img1, cv::noArray(), keypoints_1, descriptors_1);
-  orb_inst->detectAndCompute(img2, cv::noArray(), keypoints_2, descriptors_2);
+  orb_inst->detect(img1, keypoints_1);
+  orb_inst->detect(img2, keypoints_2);
+
+  kps_sub_1 = BrownANMS(keypoints_1, 3000);
+  kps_sub_2 = BrownANMS(keypoints_2, 3000);
+
+  // kps_sub_1 = keypoints_1;
+  // kps_sub_2 = keypoints_2;
+
+  orb_inst->compute(img1, kps_sub_1, descriptors_1);
+  orb_inst->compute(img2, kps_sub_2, descriptors_2);
 
   std::vector<cv::DMatch> matches12;
   std::vector<cv::DMatch> good_matches;
@@ -60,8 +71,8 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
 
   cv::xfeatures2d::matchGMS(img1.size(),
                             img2.size(),
-                            keypoints_1,
-                            keypoints_2,
+                            kps_sub_1,
+                            kps_sub_2,
                             matches12,
                             good_matches,
                             with_rotation,
@@ -72,12 +83,12 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
   std::vector<int> kp2_idxs;
   for (std::size_t i = 0; i < good_matches.size(); i++)
   {
-    kp1_idxs.push_back(good_matches[i].trainIdx);
-    kp2_idxs.push_back(good_matches[i].queryIdx);
+    kp1_idxs.push_back(good_matches[i].queryIdx);
+    kp2_idxs.push_back(good_matches[i].trainIdx);
   }
 
-  cv::KeyPoint::convert(keypoints_1, pts1, kp1_idxs);
-  cv::KeyPoint::convert(keypoints_2, pts2, kp2_idxs);
+  cv::KeyPoint::convert(kps_sub_1, pts1, kp1_idxs);
+  cv::KeyPoint::convert(kps_sub_2, pts2, kp2_idxs);
 
   // spdlog::info(
   //     "pts size = {}, keypoint idxs = {}, matches size = {}, keypoint 1 size
@@ -86,13 +97,13 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
   //     pts1.size(),
   //     kp1_idxs.size(),
   //     good_matches.size(),
-  //     keypoints_1.size());
+  //     kps_sub_1.size());
 
   cv::Mat img_matches;
   cv::drawMatches(img1,
-                  keypoints_1,
+                  kps_sub_1,
                   img2,
-                  keypoints_2,
+                  kps_sub_2,
                   good_matches,
                   img_matches,
                   cv::Scalar::all(-1),
@@ -107,5 +118,38 @@ void Feature::FeatureDetectionAndMatchORB(const cv::Mat& img1,
     cv::waitKey(0);
     cv::destroyAllWindows();
   }
+}
+
+std::vector<cv::KeyPoint> Feature::BrownANMS(
+    std::vector<cv::KeyPoint> keypoints, int num_points)
+{
+  std::vector<std::pair<float, int>> results;
+  results.push_back(std::make_pair(FLT_MAX, 0));
+  for (std::size_t i = 1; i < keypoints.size(); ++i)
+  {  // for every keypoint we get the min distance to the previously visited
+     // keypoints
+    float minDist = FLT_MAX;
+    for (std::size_t j = 0; j < i; ++j)
+    {
+      float exp1    = (keypoints[j].pt.x - keypoints[i].pt.x);
+      float exp2    = (keypoints[j].pt.y - keypoints[i].pt.y);
+      float curDist = std::sqrt(exp1 * exp1 + exp2 * exp2);
+      minDist       = std::min(curDist, minDist);
+    }
+    results.push_back(std::make_pair(minDist, i));
+  }
+  std::sort(results.begin(),
+            results.end(),
+            [](const std::pair<float, int>& left,
+               const std::pair<float, int>& right) {
+              return left.first > right.first;
+            });  // sorting by radius
+
+  std::vector<cv::KeyPoint> kp;
+  for (int i = 0; i < num_points; ++i)
+    kp.push_back(
+        keypoints[results[i].second]);  // extracting num_points keypoints
+
+  return kp;
 }
 }  // namespace room

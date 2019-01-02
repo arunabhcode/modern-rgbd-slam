@@ -52,20 +52,16 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
   {
     spdlog::info("Size of correspondence vectors = {}", pts0.size());
   }
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
   std::unique_ptr<double[]> extrinsics(new double[6]);
   cv::Mat R_init = cv::Mat::eye(3, 3, CV_64FC1);
   cv::Mat r_init;
   cv::Rodrigues(R_init, r_init);
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   cv::Mat R_decode(3, 3, CV_64FC1, cv::Scalar(0.0));
   cv::Mat r_decode(3, 1, CV_64FC1, cv::Scalar(0.0));
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   cv::Mat t_init(1, 3, CV_64FC1, cv::Scalar(0.0));
   cv::Mat t_decode(1, 3, CV_64FC1, cv::Scalar(0.0));
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   extrinsics[0] = r_init.at<double>(0, 0);
   extrinsics[1] = r_init.at<double>(1, 0);
@@ -73,8 +69,6 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
   extrinsics[3] = t_init.at<double>(0, 0);
   extrinsics[4] = t_init.at<double>(0, 1);
   extrinsics[5] = t_init.at<double>(0, 2);
-
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   ceres::Problem problem;
   std::vector<ceres::ResidualBlockId> all_res_blk_ids;
@@ -110,7 +104,6 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
     all_res_blk_ids.emplace_back(problem.AddResidualBlock(
         cost_function, loss_function, extrinsics.get()));
   }
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   spdlog::info("Ceres to start solving");
   ceres::Solver::Options options;
@@ -118,7 +111,6 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
   ceres::Solve(options, &problem, &summary);
   spdlog::info("Ceres summary = {}", summary.BriefReport());
   spdlog::info("Ceres finished solving");
-  spdlog::debug("file = {}  line = {}", __FILE__, __LINE__);
 
   r_decode.at<double>(0, 0) = extrinsics[0];
   r_decode.at<double>(1, 0) = extrinsics[1];

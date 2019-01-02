@@ -25,7 +25,6 @@ class ReprojICP
   {
     T rot13[3];
     T t13[3];
-    // T rot33[9];
 
     rot13[0] = extrinsics[0];
     rot13[1] = extrinsics[1];
@@ -35,7 +34,6 @@ class ReprojICP
     t13[1] = extrinsics[4];
     t13[2] = extrinsics[5];
 
-    // ceres::AngleAxisToRotationMatrix(rot13, rot33);
     T rot_pt[3] = {T(m_x2), T(m_y2), T(m_z2)};
 
     ceres::AngleAxisRotatePoint(rot13, rot_pt, rot_pt);

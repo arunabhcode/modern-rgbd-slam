@@ -33,6 +33,9 @@ class Feature
                                    std::vector<cv::Point2f>& pts1,
                                    std::vector<cv::Point2f>& pts2);
 
+  std::vector<cv::KeyPoint> BrownANMS(std::vector<cv::KeyPoint> keypoints,
+                                      int num_points);
+
  private:
   std::string m_show_debug;
 };  // class feature
