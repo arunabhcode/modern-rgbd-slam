@@ -12,6 +12,7 @@ set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ICP.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Pose.h
 )
 
 source_group("include" FILES ${PROJECT_INCS})

@@ -24,17 +24,8 @@ class ICP
   template <typename T>
   bool operator()(const T* extrinsics, T* residuals) const
   {
-    T rot13[3];
-    T t13[3];
-
-    rot13[0] = extrinsics[0];
-    rot13[1] = extrinsics[1];
-    rot13[2] = extrinsics[2];
-
-    t13[0] = extrinsics[3];
-    t13[1] = extrinsics[4];
-    t13[2] = extrinsics[5];
-
+    T rot13[3]  = {extrinsics[0], extrinsics[1], extrinsics[2]};
+    T t13[3]    = {extrinsics[3], extrinsics[4], extrinsics[5]};
     T rot_pt[3] = {T(m_x2), T(m_y2), T(m_z2)};
 
     ceres::AngleAxisRotatePoint(rot13, rot_pt, rot_pt);
