@@ -5,13 +5,13 @@ project(room_rgbdslam)
 set(PROJECT_SRCS
 ${PROJECT_SOURCE_DIR}/src/Feature.cpp
 ${PROJECT_SOURCE_DIR}/src/Odometry.cpp
-${PROJECT_SOURCE_DIR}/src/ReprojICP.cpp
+${PROJECT_SOURCE_DIR}/src/ICP.cpp
 )
 
 set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ReprojICP.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ICP.h
 )
 
 source_group("include" FILES ${PROJECT_INCS})

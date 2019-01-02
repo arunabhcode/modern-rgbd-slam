@@ -1,24 +1,25 @@
 // Copyright 2018 Arunabh Sharma
 
-#ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_REPROJICP_H_
-#define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_REPROJICP_H_
+#ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_ICP_H_
+#define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_ICP_H_
 
 #include "ceres/ceres.h"
 #include "ceres/rotation.h"
 
 namespace room
 {
-class ReprojICP
+class ICP
 {
  public:
-  ReprojICP(const double x1,
-            const double y1,
-            const double z1,
-            const double x2,
-            const double y2,
-            const double z2);
+  ICP() = delete;
+  ICP(const double x1,
+      const double y1,
+      const double z1,
+      const double x2,
+      const double y2,
+      const double z2);
 
-  ~ReprojICP() = default;
+  ~ICP() = default;
 
   template <typename T>
   bool operator()(const T* extrinsics, T* residuals) const
@@ -57,4 +58,4 @@ class ReprojICP
 };
 }  // namespace room
 
-#endif  // MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_REPROJICP_H_
+#endif  // MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_ICP_H_

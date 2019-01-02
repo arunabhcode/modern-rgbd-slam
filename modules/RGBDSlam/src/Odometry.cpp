@@ -13,7 +13,7 @@
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
-#include "Room/RGBDSlam/ReprojICP.h"
+#include "Room/RGBDSlam/ICP.h"
 
 namespace room
 {
@@ -88,11 +88,11 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
                            (pts1[i].y - pp.y) / focal * pt1_Z,
                            pt1_Z);
 
-    ReprojICP* reprojICP = new ReprojICP(
+    ICP* icp = new ICP(
         pt0_3d[0], pt0_3d[1], pt0_3d[2], pt1_3d[0], pt1_3d[1], pt1_3d[2]);
 
     ceres::CostFunction* cost_function =
-        new ceres::AutoDiffCostFunction<ReprojICP, 3, 6>(reprojICP);
+        new ceres::AutoDiffCostFunction<ICP, 3, 6>(icp);
     ceres::LossFunction* loss_function = new ceres::HuberLoss(1.0);
 
     all_res_blk_ids.emplace_back(problem.AddResidualBlock(
