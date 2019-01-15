@@ -6,18 +6,29 @@
 #include <iostream>
 
 #include "Eigen/Core"
+#include "Eigen/Dense"
 
 namespace room
 {
 struct Pose
 {
-  uint64_t timestamp;
-  Eigen::Quaternionf orientation;
-  Eigen::Vector3f position;
+  uint64_t m_timestamp;
+  Eigen::Quaternionf m_orientation;
+  Eigen::Vector3f m_position;
   Pose()
-      : timestamp(0)
-      , orientation(Eigen::Quaternionf(1.0f, 0.0f, 0.0f, 0.0f))
-      , position((Eigen::Vector3f(0.0f, 0.0f, 0.0f)))
+      : m_timestamp(0)
+      , m_orientation(Eigen::Quaternionf(1.0f, 0.0f, 0.0f, 0.0f))
+      , m_position((Eigen::Vector3f(0.0f, 0.0f, 0.0f)))
+  {
+  }
+  Pose(const Eigen::Quaternionf& orientation, const Eigen::Vector3f& position)
+      : m_timestamp(0), m_orientation(orientation), m_position(position)
+  {
+  }
+  Pose(const uint64_t timestamp,
+       const Eigen::Quaternionf& orientation,
+       const Eigen::Vector3f& position)
+      : m_timestamp(timestamp), m_orientation(orientation), m_position(position)
   {
   }
   ~Pose() = default;
@@ -25,9 +36,10 @@ struct Pose
 
 std::ostream& operator<<(std::ostream& os, const Pose& pose)
 {
-  os << timestamp << " " << pose.orientation.w() << " " << pose.orientation.x()
-     << " " << pose.orientation.y() << " " << pose.orientation.z() << " "
-     << pose.position[0] << " " << pose.position[1] << " " << pose.position[2];
+  os << pose.m_timestamp << " " << pose.m_orientation.w() << " "
+     << pose.m_orientation.x() << " " << pose.m_orientation.y() << " "
+     << pose.m_orientation.z() << " " << pose.m_position[0] << " "
+     << pose.m_position[1] << " " << pose.m_position[2];
   return os;
 }
 

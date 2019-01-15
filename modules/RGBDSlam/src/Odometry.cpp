@@ -33,16 +33,15 @@ void Odometry::RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
   cv::recoverPose(E, pts1, pts2, R, t, focal, pp, mask);  // R is from 1 to 2
 }
 
-void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
-                               const std::vector<cv::Point2f>& pts1,
-                               const cv::Mat& color0,
-                               const cv::Mat& color1,
-                               const cv::Mat& depth0,
-                               const cv::Mat& depth1,
-                               const float focal,
-                               const cv::Point2d pp,
-                               cv::Mat& R,
-                               cv::Mat& t)
+Pose Odometry::PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
+                                 const std::vector<cv::Point2f>& pts1,
+                                 const cv::Mat& color0,
+                                 const cv::Mat& color1,
+                                 const cv::Mat& depth0,
+                                 const cv::Mat& depth1,
+                                 const float focal,
+                                 const cv::Point2d pp,
+                                 Pose initial_pose)
 {
   if (pts0.size() != pts1.size())
   {
@@ -116,7 +115,9 @@ void Odometry::RtEstimationICP(const std::vector<cv::Point2f>& pts0,
   t_decode.at<double>(0, 1) = extrinsics[4];
   t_decode.at<double>(0, 2) = extrinsics[5];
 
-  R = R_decode.clone();
-  t = t_decode.clone();
+  Pose out_pose;
+  return out_pose;
+  // R = R_decode.clone();
+  // t = t_decode.clone();
 }
 }  // namespace room
