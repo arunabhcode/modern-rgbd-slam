@@ -34,7 +34,7 @@ struct Pose
     ~Pose() = default;
 };
 
-std::ostream& operator<<(std::ostream& os, const Pose& pose)
+inline std::ostream& operator<<(std::ostream& os, const Pose& pose)
 {
     os << pose.m_timestamp << " " << pose.m_orientation.w() << " " << pose.m_orientation.x() << " "
        << pose.m_orientation.y() << " " << pose.m_orientation.z() << " " << pose.m_position[0]

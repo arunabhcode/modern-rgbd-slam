@@ -6,6 +6,7 @@ set(PROJECT_SRCS
 ${PROJECT_SOURCE_DIR}/src/Feature.cpp
 ${PROJECT_SOURCE_DIR}/src/Odometry.cpp
 ${PROJECT_SOURCE_DIR}/src/ICP.cpp
+${PROJECT_SOURCE_DIR}/src/Motion.cpp
 )
 
 set(PROJECT_INCS
@@ -13,6 +14,7 @@ ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ICP.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Pose.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Motion.h
 )
 
 source_group("include" FILES ${PROJECT_INCS})

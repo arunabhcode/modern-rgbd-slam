@@ -14,6 +14,7 @@
 #include "spdlog/spdlog.h"
 
 #include "Room/RGBDSlam/ICP.h"
+#include "Room/RGBDSlam/Pose.h"
 
 namespace room
 {
