@@ -8,38 +8,38 @@
 
 #include "opencv2/opencv.hpp"
 
+#include "Room/RGBDSlam/Frame.h"
+
 namespace room
 {
 class Feature
 {
- public:
-  Feature() = delete;
-  explicit Feature(const std::string show_debug);
-  ~Feature() = default;
+   public:
+    Feature() = delete;
+    explicit Feature(const std::string show_debug);
+    ~Feature() = default;
 
-  void FeatureDetectionAndMatchORB(const cv::Mat& img1,
-                                   const cv::Mat& img2,
-                                   const int nfeatures,
-                                   const float scale_factor,
-                                   const int nlevels,
-                                   const int edge_threshold,
-                                   const int first_level,
-                                   const int WTA_K,
-                                   const cv::ORB::ScoreType score_type,
-                                   const int patch_size,
-                                   const int fast_threshold,
-                                   const bool with_rotation,
-                                   const bool with_scale,
-                                   const float threshold_factor,
-                                   const int num_points,
-                                   std::vector<cv::Point2f>& pts1,
-                                   std::vector<cv::Point2f>& pts2);
+    void FeatureDetectionAndMatchORB(Frame& frame0,
+                                     Frame& frame1,
+                                     const int nfeatures,
+                                     const float scale_factor,
+                                     const int nlevels,
+                                     const int edge_threshold,
+                                     const int first_level,
+                                     const int WTA_K,
+                                     const cv::ORB::ScoreType score_type,
+                                     const int patch_size,
+                                     const int fast_threshold,
+                                     const bool with_rotation,
+                                     const bool with_scale,
+                                     const float threshold_factor,
+                                     const int num_points);
 
-  std::vector<cv::KeyPoint> ANMS(std::vector<cv::KeyPoint> keypoints,
-                                 int num_points);
+    std::vector<cv::KeyPoint> ANMS(std::vector<cv::KeyPoint> keypoints,
+                                   int num_points);
 
- private:
-  std::string m_show_debug;
+   private:
+    std::string m_show_debug;
 };  // class feature
 }  // namespace room
 

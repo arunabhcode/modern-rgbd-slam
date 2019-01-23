@@ -8,6 +8,7 @@
 
 #include "opencv2/opencv.hpp"
 
+#include "Room/RGBDSlam/Frame.h"
 #include "Room/RGBDSlam/Pose.h"
 
 namespace room
@@ -19,21 +20,15 @@ class Odometry
     explicit Odometry(const std::string show_debug);
     ~Odometry() = default;
 
-    void RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
-                               const std::vector<cv::Point2f>& pts2,
-                               const float focal,
-                               const cv::Point2d pp,
-                               cv::Mat& R,
-                               cv::Mat& t);
+    // void RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
+    //                            const std::vector<cv::Point2f>& pts2,
+    //                            const float focal,
+    //                            const cv::Point2d pp,
+    //                            cv::Mat& R,
+    //                            cv::Mat& t);
 
-    Pose PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
-                           const std::vector<cv::Point2f>& pts1,
-                           const cv::Mat& color0,
-                           const cv::Mat& color1,
-                           const cv::Mat& depth0,
-                           const cv::Mat& depth1,
-                           const float focal,
-                           const cv::Point2d pp,
+    Pose PoseEstimationICP(Frame& frame0,
+                           Frame& frame1,
                            Pose initial_pose = Pose());
 
    private:

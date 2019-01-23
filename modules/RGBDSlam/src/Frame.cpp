@@ -21,14 +21,12 @@ Frame::Frame(const int id)
 }
 
 Frame::Frame(const int id,
-             const Pose frame_pose,
              const uint64_t timestamp,
              const cv::Mat& color,
              const cv::Mat& depth,
              const float focal,
              const Eigen::Vector2f& pp)
     : m_id(id)
-    , m_pose(frame_pose)
     , m_timestamp(timestamp)
     , m_color_img(color)
     , m_depth_img(depth)
@@ -47,7 +45,7 @@ cv::Mat Frame::ToIntrinsicsMat()
     return intrinsics;
 }
 
-void Frame::SetKeypoints(const std::vector<cv::KeyPoint>& in_keypoints)
+void Frame::SetKeypoints(const std::vector<cv::Point2f>& in_keypoints)
 {
     m_keypoints = in_keypoints;
 }
@@ -57,7 +55,7 @@ void Frame::SetDescriptors(const cv::Mat& in_descriptors)
     m_descriptors = in_descriptors;
 }
 
-std::vector<cv::KeyPoint>& Frame::GetKeypoints()
+std::vector<cv::Point2f>& Frame::GetKeypoints()
 {
     return m_keypoints;
 }
@@ -65,6 +63,36 @@ std::vector<cv::KeyPoint>& Frame::GetKeypoints()
 cv::Mat& Frame::GetDescriptors()
 {
     return m_descriptors;
+}
+
+int Frame::GetKeypointsSize()
+{
+    return m_keypoints.size();
+}
+
+Eigen::Vector2f Frame::GetPrincipalPoint()
+{
+    return m_pp;
+}
+
+float Frame::GetFocal()
+{
+    return m_focal;
+}
+
+cv::Mat& Frame::GetDepth()
+{
+    return m_depth_img;
+}
+
+cv::Mat& Frame::GetColor()
+{
+    return m_color_img;
+}
+
+void Frame::SetPose(const Pose& in_pose)
+{
+    m_pose = in_pose;
 }
 
 }  // namespace room

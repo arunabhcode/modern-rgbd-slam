@@ -13,6 +13,7 @@
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
+#include "Room/RGBDSlam/Frame.h"
 #include "Room/RGBDSlam/ICP.h"
 #include "Room/RGBDSlam/Pose.h"
 
@@ -22,36 +23,32 @@ Odometry::Odometry(const std::string show_debug) : m_show_debug(show_debug)
 {
 }
 
-void Odometry::RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
-                                     const std::vector<cv::Point2f>& pts2,
-                                     const float focal,
-                                     const cv::Point2d pp,
-                                     cv::Mat& R,
-                                     cv::Mat& t)
-{
-    cv::Mat E, mask, R1;
-    E = cv::findEssentialMat(
-        pts1, pts2, focal, pp, cv::RANSAC, 0.999, 1.0, mask);
-    cv::recoverPose(E, pts1, pts2, R, t, focal, pp, mask);  // R is from 1 to 2
-}
+// void Odometry::RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
+//                                      const std::vector<cv::Point2f>& pts2,
+//                                      const float focal,
+//                                      const cv::Point2d pp,
+//                                      cv::Mat& R,
+//                                      cv::Mat& t)
+// {
+//     cv::Mat E, mask, R1;
+//     E = cv::findEssentialMat(
+//         pts1, pts2, focal, pp, cv::RANSAC, 0.999, 1.0, mask);
+//     cv::recoverPose(E, pts1, pts2, R, t, focal, pp, mask);  // R is from 1 to
+//     2
+// }
 
-Pose Odometry::PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
-                                 const std::vector<cv::Point2f>& pts1,
-                                 const cv::Mat& color0,
-                                 const cv::Mat& color1,
-                                 const cv::Mat& depth0,
-                                 const cv::Mat& depth1,
-                                 const float focal,
-                                 const cv::Point2d pp,
+Pose Odometry::PoseEstimationICP(Frame& frame0,
+                                 Frame& frame1,
                                  Pose initial_pose)
 {
-    if (pts0.size() != pts1.size())
+    if (frame0.GetKeypointsSize() != frame1.GetKeypointsSize())
     {
         spdlog::warn("The size of correspondence vectors does not match");
     }
     else
     {
-        spdlog::info("Size of correspondence vectors = {}", pts0.size());
+        spdlog::info("Size of correspondence vectors = {}",
+                     frame0.GetKeypointsSize());
     }
     std::unique_ptr<double[]> extrinsics(
         new double[7]);  // 4 for the orientation, 3 for the translation
@@ -72,19 +69,27 @@ Pose Odometry::PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
     ceres::Problem problem;
     std::vector<ceres::ResidualBlockId> all_res_blk_ids;
 
+    std::vector<cv::Point2f> pts0 = frame0.GetKeypoints();
+    std::vector<cv::Point2f> pts1 = frame1.GetKeypoints();
+    cv::Mat depth0                = frame0.GetDepth();
+    cv::Mat depth1                = frame1.GetDepth();
+
+    float focal        = frame0.GetFocal();
+    Eigen::Vector2f pp = frame0.GetPrincipalPoint();
+
     for (std::size_t i = 0; i < pts0.size(); i++)
     {
         float pt0_Z = depth0.at<float>(static_cast<int>(pts0[i].y),
                                        static_cast<int>(pts0[i].x));
-        Eigen::Vector3f pt0_3d((pts0[i].x - pp.x) / focal * pt0_Z,
-                               (pts0[i].y - pp.y) / focal * pt0_Z,
+        Eigen::Vector3f pt0_3d((pts0[i].x - pp[0]) / focal * pt0_Z,
+                               (pts0[i].y - pp[1]) / focal * pt0_Z,
                                pt0_Z);
 
         float pt1_Z = depth1.at<float>(static_cast<int>(pts1[i].y),
                                        static_cast<int>(pts1[i].x));
 
-        Eigen::Vector3f pt1_3d((pts1[i].x - pp.x) / focal * pt1_Z,
-                               (pts1[i].y - pp.y) / focal * pt1_Z,
+        Eigen::Vector3f pt1_3d((pts1[i].x - pp[0]) / focal * pt1_Z,
+                               (pts1[i].y - pp[1]) / focal * pt1_Z,
                                pt1_Z);
 
         ICP* icp = new ICP(

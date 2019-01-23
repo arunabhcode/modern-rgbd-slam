@@ -19,7 +19,6 @@ class Frame
     ~Frame() = default;
     explicit Frame(const int id);
     Frame(const int id,
-          const Pose frame_pose,
           const uint64_t timestamp,
           const cv::Mat& color,
           const cv::Mat& depth,
@@ -28,11 +27,17 @@ class Frame
 
     cv::Mat ToIntrinsicsMat();
 
-    void SetKeypoints(const std::vector<cv::KeyPoint>& in_keypoints);
+    // Getters and Setters
+    void SetKeypoints(const std::vector<cv::Point2f>& in_keypoints);
     void SetDescriptors(const cv::Mat& in_descriptors);
-
-    std::vector<cv::KeyPoint>& GetKeypoints();
+    void SetPose(const Pose& in_pose);
+    std::vector<cv::Point2f>& GetKeypoints();
     cv::Mat& GetDescriptors();
+    int GetKeypointsSize();
+    Eigen::Vector2f GetPrincipalPoint();
+    float GetFocal();
+    cv::Mat& GetDepth();
+    cv::Mat& GetColor();
 
    private:
     int m_id;
@@ -42,7 +47,7 @@ class Frame
     cv::Mat m_depth_img;
     float m_focal;
     Eigen::Vector2f m_pp;
-    std::vector<cv::KeyPoint> m_keypoints;
+    std::vector<cv::Point2f> m_keypoints;
     cv::Mat m_descriptors;
 };  // class frame
 
