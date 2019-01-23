@@ -26,19 +26,6 @@ class Odometry
                                cv::Mat& R,
                                cv::Mat& t);
 
-    /**
-     * @brief      Deconstructed variant of ICP implementing for checking results
-     *             and because of KITTI results
-     *
-     * @param[in]  pts0    The points 0
-     * @param[in]  pts1    The points 1
-     * @param[in]  depth0  The depth 0
-     * @param[in]  depth1  The depth 1
-     * @param[in]  focal   The focal
-     * @param[in]  pp      { parameter_description }
-     * @param      R       { parameter_description }
-     * @param      t       { parameter_description }
-     */
     Pose PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
                            const std::vector<cv::Point2f>& pts1,
                            const cv::Mat& color0,

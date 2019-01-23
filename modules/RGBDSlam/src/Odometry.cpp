@@ -30,7 +30,8 @@ void Odometry::RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
                                      cv::Mat& t)
 {
     cv::Mat E, mask, R1;
-    E = cv::findEssentialMat(pts1, pts2, focal, pp, cv::RANSAC, 0.999, 1.0, mask);
+    E = cv::findEssentialMat(
+        pts1, pts2, focal, pp, cv::RANSAC, 0.999, 1.0, mask);
     cv::recoverPose(E, pts1, pts2, R, t, focal, pp, mask);  // R is from 1 to 2
 }
 
@@ -55,7 +56,8 @@ Pose Odometry::PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
     std::unique_ptr<double[]> extrinsics(
         new double[7]);  // 4 for the orientation, 3 for the translation
 
-    spdlog::info("Initial rotation = \n {}", initial_pose.m_orientation.toRotationMatrix());
+    spdlog::info("Initial rotation = \n {}",
+                 initial_pose.m_orientation.toRotationMatrix());
     spdlog::info("Initial translation = \n {}", initial_pose.m_position);
 
     // convention for the quaternion in this repo will be w, x, y, z
@@ -72,22 +74,28 @@ Pose Odometry::PoseEstimationICP(const std::vector<cv::Point2f>& pts0,
 
     for (std::size_t i = 0; i < pts0.size(); i++)
     {
-        float pt0_Z = depth0.at<float>(static_cast<int>(pts0[i].y), static_cast<int>(pts0[i].x));
-        Eigen::Vector3f pt0_3d(
-            (pts0[i].x - pp.x) / focal * pt0_Z, (pts0[i].y - pp.y) / focal * pt0_Z, pt0_Z);
+        float pt0_Z = depth0.at<float>(static_cast<int>(pts0[i].y),
+                                       static_cast<int>(pts0[i].x));
+        Eigen::Vector3f pt0_3d((pts0[i].x - pp.x) / focal * pt0_Z,
+                               (pts0[i].y - pp.y) / focal * pt0_Z,
+                               pt0_Z);
 
-        float pt1_Z = depth1.at<float>(static_cast<int>(pts1[i].y), static_cast<int>(pts1[i].x));
+        float pt1_Z = depth1.at<float>(static_cast<int>(pts1[i].y),
+                                       static_cast<int>(pts1[i].x));
 
-        Eigen::Vector3f pt1_3d(
-            (pts1[i].x - pp.x) / focal * pt1_Z, (pts1[i].y - pp.y) / focal * pt1_Z, pt1_Z);
+        Eigen::Vector3f pt1_3d((pts1[i].x - pp.x) / focal * pt1_Z,
+                               (pts1[i].y - pp.y) / focal * pt1_Z,
+                               pt1_Z);
 
-        ICP* icp = new ICP(pt0_3d[0], pt0_3d[1], pt0_3d[2], pt1_3d[0], pt1_3d[1], pt1_3d[2]);
+        ICP* icp = new ICP(
+            pt0_3d[0], pt0_3d[1], pt0_3d[2], pt1_3d[0], pt1_3d[1], pt1_3d[2]);
 
-        ceres::CostFunction* cost_function = new ceres::AutoDiffCostFunction<ICP, 3, 7>(icp);
-        ceres::LossFunction* loss_function = new ceres::HuberLoss(1.0);
+        ceres::CostFunction* cost_function =
+            new ceres::AutoDiffCostFunction<ICP, 3, 7>(icp);
+        ceres::LossFunction* loss_function = new ceres::HuberLoss(5.591);
 
-        all_res_blk_ids.emplace_back(
-            problem.AddResidualBlock(cost_function, loss_function, extrinsics.get()));
+        all_res_blk_ids.emplace_back(problem.AddResidualBlock(
+            cost_function, loss_function, extrinsics.get()));
     }
 
     spdlog::info("Ceres to start solving");
