@@ -12,34 +12,46 @@
 
 namespace room
 {
-class Frame
+struct Frame
 {
-   public:
     Frame()  = delete;
     ~Frame() = default;
-    explicit Frame(const int id);
+
+    explicit Frame(const int id)
+        : m_id(id)
+        , m_pose()
+        , m_timestamp(0)
+        , m_color_img(cv::Mat())
+        , m_depth_img(cv::Mat())
+        , m_focal(0.0f)
+        , m_pp(Eigen::Vector2f(0.0f, 0.0f))
+    {
+    }
     Frame(const int id,
           const uint64_t timestamp,
           const cv::Mat& color,
           const cv::Mat& depth,
           const float focal,
-          const Eigen::Vector2f& pp);
+          const Eigen::Vector2f& pp)
+        : m_id(id)
+        , m_timestamp(timestamp)
+        , m_color_img(color)
+        , m_depth_img(depth)
+        , m_focal(focal)
+        , m_pp(pp)
+    {
+    }
 
-    cv::Mat ToIntrinsicsMat();
+    cv::Mat ToIntrinsicsMat()
+    {
+        cv::Mat intrinsics         = cv::Mat::eye(3, 3, CV_32FC1);
+        intrinsics.at<float>(0, 0) = m_focal;
+        intrinsics.at<float>(1, 1) = m_focal;
+        intrinsics.at<float>(0, 2) = m_pp[0];
+        intrinsics.at<float>(1, 2) = m_pp[1];
+        return intrinsics;
+    }
 
-    // Getters and Setters
-    void SetKeypoints(const std::vector<cv::Point2f>& in_keypoints);
-    void SetDescriptors(const cv::Mat& in_descriptors);
-    void SetPose(const Pose& in_pose);
-    std::vector<cv::Point2f>& GetKeypoints();
-    cv::Mat& GetDescriptors();
-    int GetKeypointsSize();
-    Eigen::Vector2f GetPrincipalPoint();
-    float GetFocal();
-    cv::Mat& GetDepth();
-    cv::Mat& GetColor();
-
-   private:
     int m_id;
     Pose m_pose;
     uint64_t m_timestamp;

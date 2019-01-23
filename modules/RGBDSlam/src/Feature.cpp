@@ -41,11 +41,6 @@ void Feature::FeatureDetectionAndMatchORB(Frame& frame0,
     std::vector<cv::KeyPoint> keypoints_match_1;
     cv::Mat descriptors_0;
     cv::Mat descriptors_1;
-    std::vector<cv::Point2f> pts0;
-    std::vector<cv::Point2f> pts1;
-
-    cv::Mat img0 = frame0.GetColor();
-    cv::Mat img1 = frame1.GetColor();
 
     cv::Ptr<cv::Feature2D> orb_inst = cv::ORB::create(nfeatures,
                                                       scale_factor,
@@ -57,14 +52,14 @@ void Feature::FeatureDetectionAndMatchORB(Frame& frame0,
                                                       patch_size,
                                                       fast_threshold);
 
-    orb_inst->detect(img0, keypoints_0);
-    orb_inst->detect(img1, keypoints_1);
+    orb_inst->detect(frame0.m_color_img, keypoints_0);
+    orb_inst->detect(frame1.m_color_img, keypoints_1);
 
     kps_sub_0 = ANMS(keypoints_0, num_points);
     kps_sub_1 = ANMS(keypoints_1, num_points);
 
-    orb_inst->compute(img0, kps_sub_0, descriptors_0);
-    orb_inst->compute(img1, kps_sub_1, descriptors_1);
+    orb_inst->compute(frame0.m_color_img, kps_sub_0, descriptors_0);
+    orb_inst->compute(frame1.m_color_img, kps_sub_1, descriptors_1);
 
     std::vector<cv::DMatch> matches01;
     std::vector<cv::DMatch> good_matches;
@@ -73,8 +68,8 @@ void Feature::FeatureDetectionAndMatchORB(Frame& frame0,
         cv::DescriptorMatcher::create("BruteForce-Hamming");
     matcher->match(descriptors_0, descriptors_1, matches01);
 
-    cv::xfeatures2d::matchGMS(img0.size(),
-                              img1.size(),
+    cv::xfeatures2d::matchGMS(frame0.m_color_img.size(),
+                              frame1.m_color_img.size(),
                               kps_sub_0,
                               kps_sub_1,
                               matches01,
@@ -91,18 +86,15 @@ void Feature::FeatureDetectionAndMatchORB(Frame& frame0,
         kp1_idxs.push_back(good_matches[i].trainIdx);
     }
 
-    cv::KeyPoint::convert(kps_sub_0, pts0, kp0_idxs);
-    cv::KeyPoint::convert(kps_sub_1, pts1, kp1_idxs);
-
-    frame0.SetKeypoints(pts0);
-    frame1.SetKeypoints(pts1);
+    cv::KeyPoint::convert(kps_sub_0, frame0.m_keypoints, kp0_idxs);
+    cv::KeyPoint::convert(kps_sub_1, frame1.m_keypoints, kp1_idxs);
 
     if (m_show_debug == "ALL" || m_show_debug == "ORB_MATCHES")
     {
         cv::Mat img_matches;
-        cv::drawMatches(img0,
+        cv::drawMatches(frame0.m_color_img,
                         kps_sub_0,
-                        img1,
+                        frame1.m_color_img,
                         kps_sub_1,
                         good_matches,
                         img_matches,

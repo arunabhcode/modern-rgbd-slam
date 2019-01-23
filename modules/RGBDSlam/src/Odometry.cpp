@@ -41,14 +41,14 @@ Pose Odometry::PoseEstimationICP(Frame& frame0,
                                  Frame& frame1,
                                  Pose initial_pose)
 {
-    if (frame0.GetKeypointsSize() != frame1.GetKeypointsSize())
+    if (frame0.m_keypoints.size() != frame1.m_keypoints.size())
     {
         spdlog::warn("The size of correspondence vectors does not match");
     }
     else
     {
         spdlog::info("Size of correspondence vectors = {}",
-                     frame0.GetKeypointsSize());
+                     frame0.m_keypoints.size());
     }
     std::unique_ptr<double[]> extrinsics(
         new double[7]);  // 4 for the orientation, 3 for the translation
@@ -69,28 +69,25 @@ Pose Odometry::PoseEstimationICP(Frame& frame0,
     ceres::Problem problem;
     std::vector<ceres::ResidualBlockId> all_res_blk_ids;
 
-    std::vector<cv::Point2f> pts0 = frame0.GetKeypoints();
-    std::vector<cv::Point2f> pts1 = frame1.GetKeypoints();
-    cv::Mat depth0                = frame0.GetDepth();
-    cv::Mat depth1                = frame1.GetDepth();
-
-    float focal        = frame0.GetFocal();
-    Eigen::Vector2f pp = frame0.GetPrincipalPoint();
+    std::vector<cv::Point2f> pts0 = frame0.m_keypoints;
+    std::vector<cv::Point2f> pts1 = frame1.m_keypoints;
 
     for (std::size_t i = 0; i < pts0.size(); i++)
     {
-        float pt0_Z = depth0.at<float>(static_cast<int>(pts0[i].y),
-                                       static_cast<int>(pts0[i].x));
-        Eigen::Vector3f pt0_3d((pts0[i].x - pp[0]) / focal * pt0_Z,
-                               (pts0[i].y - pp[1]) / focal * pt0_Z,
-                               pt0_Z);
+        float pt0_Z = frame0.m_depth_img.at<float>(static_cast<int>(pts0[i].y),
+                                                   static_cast<int>(pts0[i].x));
+        Eigen::Vector3f pt0_3d(
+            (pts0[i].x - frame0.m_pp[0]) / frame0.m_focal * pt0_Z,
+            (pts0[i].y - frame0.m_pp[1]) / frame0.m_focal * pt0_Z,
+            pt0_Z);
 
-        float pt1_Z = depth1.at<float>(static_cast<int>(pts1[i].y),
-                                       static_cast<int>(pts1[i].x));
+        float pt1_Z = frame1.m_depth_img.at<float>(static_cast<int>(pts1[i].y),
+                                                   static_cast<int>(pts1[i].x));
 
-        Eigen::Vector3f pt1_3d((pts1[i].x - pp[0]) / focal * pt1_Z,
-                               (pts1[i].y - pp[1]) / focal * pt1_Z,
-                               pt1_Z);
+        Eigen::Vector3f pt1_3d(
+            (pts1[i].x - frame1.m_pp[0]) / frame1.m_focal * pt1_Z,
+            (pts1[i].y - frame1.m_pp[1]) / frame1.m_focal * pt1_Z,
+            pt1_Z);
 
         ICP* icp = new ICP(
             pt0_3d[0], pt0_3d[1], pt0_3d[2], pt1_3d[0], pt1_3d[1], pt1_3d[2]);

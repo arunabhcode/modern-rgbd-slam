@@ -7,7 +7,6 @@ ${PROJECT_SOURCE_DIR}/src/Feature.cpp
 ${PROJECT_SOURCE_DIR}/src/Odometry.cpp
 ${PROJECT_SOURCE_DIR}/src/ICP.cpp
 ${PROJECT_SOURCE_DIR}/src/Motion.cpp
-${PROJECT_SOURCE_DIR}/src/Frame.cpp
 )
 
 set(PROJECT_INCS
