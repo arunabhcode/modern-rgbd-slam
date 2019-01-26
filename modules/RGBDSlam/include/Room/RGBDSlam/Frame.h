@@ -18,8 +18,8 @@ struct Frame
     ~Frame() = default;
 
     explicit Frame(const int id)
-        : m_id(id)
-        , m_pose()
+        : m_frame_id(id)
+        , m_pose(Pose())
         , m_timestamp(0)
         , m_color_img(cv::Mat())
         , m_depth_img(cv::Mat())
@@ -33,7 +33,7 @@ struct Frame
           const cv::Mat& depth,
           const float focal,
           const Eigen::Vector2f& pp)
-        : m_id(id)
+        : m_frame_id(id)
         , m_timestamp(timestamp)
         , m_color_img(color)
         , m_depth_img(depth)
@@ -52,7 +52,7 @@ struct Frame
         return intrinsics;
     }
 
-    int m_id;
+    int m_frame_id;
     Pose m_pose;
     uint64_t m_timestamp;
     cv::Mat m_color_img;
@@ -61,7 +61,8 @@ struct Frame
     Eigen::Vector2f m_pp;
     std::vector<cv::Point2f> m_keypoints;
     cv::Mat m_descriptors;
-};  // class frame
+    std::vector<float> m_depth;
+};  // struct frame
 
 }  // namespace room
 

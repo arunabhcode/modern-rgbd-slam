@@ -28,17 +28,20 @@ struct Pose
     Pose(const uint64_t timestamp,
          const Eigen::Quaternionf& orientation,
          const Eigen::Vector3f& position)
-        : m_timestamp(timestamp), m_orientation(orientation), m_position(position)
+        : m_timestamp(timestamp)
+        , m_orientation(orientation)
+        , m_position(position)
     {
     }
     ~Pose() = default;
-};
+};  // struct pose
 
 inline std::ostream& operator<<(std::ostream& os, const Pose& pose)
 {
-    os << pose.m_timestamp << " " << pose.m_orientation.w() << " " << pose.m_orientation.x() << " "
-       << pose.m_orientation.y() << " " << pose.m_orientation.z() << " " << pose.m_position[0]
-       << " " << pose.m_position[1] << " " << pose.m_position[2];
+    os << pose.m_timestamp << " " << pose.m_orientation.w() << " "
+       << pose.m_orientation.x() << " " << pose.m_orientation.y() << " "
+       << pose.m_orientation.z() << " " << pose.m_position[0] << " "
+       << pose.m_position[1] << " " << pose.m_position[2];
     return os;
 }
 

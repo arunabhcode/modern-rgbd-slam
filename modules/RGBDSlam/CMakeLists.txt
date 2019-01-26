@@ -16,6 +16,7 @@ ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ICP.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Pose.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Motion.h
 ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Frame.h
+${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/MapPoint.h
 )
 
 source_group("include" FILES ${PROJECT_INCS})

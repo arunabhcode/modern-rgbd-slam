@@ -56,14 +56,14 @@ int main(int argc, char* argv[])
                    cv::IMREAD_ANYDEPTH);
 
     depth0.convertTo(depth0, CV_32FC1);
-    depth0 = depth0 / 5000;
+    depth0 = depth0 / 5000.0f;
     depth1.convertTo(depth1, CV_32FC1);
-    depth1 = depth1 / 5000;
+    depth1 = depth1 / 5000.0f;
     // return 0;
     // Hardcode intrinsics for now
 
     float focal = 525.0f;
-    Eigen::Vector2f pp(319.5, 239.5);
+    Eigen::Vector2f pp(319.5f, 239.5f);
     room::Frame frame0(0, 0, color0, depth0, focal, pp);
     room::Frame frame1(1, 0, color1, depth1, focal, pp);
 
@@ -82,9 +82,6 @@ int main(int argc, char* argv[])
     float threshold_factor = json_inst["threshold_factor"];
     float num_points       = json_inst["num_points"];
     std::string show_debug = json_inst["show_debug"];
-
-    std::vector<cv::Point2f> pts0;
-    std::vector<cv::Point2f> pts1;
 
     room::Feature feature_inst(show_debug);
     feature_inst.FeatureDetectionAndMatchORB(frame0,

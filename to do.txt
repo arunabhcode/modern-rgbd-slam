@@ -3,7 +3,6 @@ TO DO:
 IMPROVEMENTS
 - Make the transform finding into a factory pattern
 
-
 FEATURE IMPLEMENTATION
 - Move transforms to local Pose Struct
 - Tracking and initial map formation
@@ -18,3 +17,19 @@ POSSIBILITIES FOR TRANSFORM FINDING
 POTENTIAL BUGS/QUESTIONS
 - Figure out why unit quaternion rotate pt doesn't work in ICP and quaternion
 rotate pt. does.
+- How to potentially fuse map points or the associate map points across multiple frames
+
+CLASS PLANNING
+- BundleAdjustment - The bundle adjustment g2o optimization/wrapper
+- LocalMapping - Bundle Adjustment Controller/Manager, Insertion into co-visibility graph and pose graph if they are eventually separate
+- PoseGraphOptimization - The pose graph g2o optimization/wrapper
+- LoopClosing - Pose Graph Optimization Controller/Manager
+- Map - The map struct
+- CovisibilityGraph - Maintains co-visibility network of frames
+
+REPOSITORY PLANNING
+- Separate the base data structures into the components/underlying slam structures.
+- Separate the concurrent queues/safe queues into common/common utils.
+
+FLOW PLANNING
+- New frame comes in, track initializes frame and mappoints, passes to local mapping, local mapping creates point/frame associations runs bundle adjustment, passes to loopclosing thread which runs loop closing/maybe global bundle adjustment.
