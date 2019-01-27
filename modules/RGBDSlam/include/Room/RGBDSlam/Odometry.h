@@ -20,13 +20,6 @@ class Odometry
     explicit Odometry(const std::string show_debug);
     ~Odometry() = default;
 
-    // void RtEstimationEssential(const std::vector<cv::Point2f>& pts1,
-    //                            const std::vector<cv::Point2f>& pts2,
-    //                            const float focal,
-    //                            const cv::Point2d pp,
-    //                            cv::Mat& R,
-    //                            cv::Mat& t);
-
     Pose PoseEstimationICP(Frame& frame0,
                            Frame& frame1,
                            Pose initial_pose = Pose());
