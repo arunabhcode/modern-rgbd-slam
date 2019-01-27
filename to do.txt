@@ -2,6 +2,7 @@ TO DO:
 
 IMPROVEMENTS
 - Make the transform finding into a factory pattern
+- Change the orientation and position to quaterniond and vector3d from their float variants.(FUCK!!!)
 
 FEATURE IMPLEMENTATION
 - Move transforms to local Pose Struct
