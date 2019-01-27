@@ -32,4 +32,4 @@ REPOSITORY PLANNING
 - Separate the concurrent queues/safe queues into common/common utils.
 
 FLOW PLANNING
-- New frame comes in, track initializes frame and mappoints, passes to local mapping, local mapping creates point/frame associations runs bundle adjustment, passes to loopclosing thread which runs loop closing/maybe global bundle adjustment.
+- New frame comes in, track initializes frame and mappoints and uses odometry to compute pose, passes to local mapping, local mapping creates/refines point/frame associations runs bundle adjustment, passes to loopclosing thread which runs loop closing/maybe global bundle adjustment.
