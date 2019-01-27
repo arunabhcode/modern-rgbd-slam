@@ -8,7 +8,7 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "Room/RGBDSlam/Frame.h"
+#include "Room/Components/Frame.h"
 
 namespace room
 {

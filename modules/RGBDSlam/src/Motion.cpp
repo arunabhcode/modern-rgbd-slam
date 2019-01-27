@@ -9,7 +9,7 @@
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
-#include "Room/RGBDSlam/Pose.h"
+#include "Room/Components/Pose.h"
 
 namespace room
 {

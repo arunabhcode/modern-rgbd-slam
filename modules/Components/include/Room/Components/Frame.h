@@ -8,7 +8,7 @@
 #include "Eigen/Core"
 #include "opencv2/opencv.hpp"
 
-#include "Room/RGBDSlam/Pose.h"
+#include "Room/Components/Pose.h"
 
 namespace room
 {

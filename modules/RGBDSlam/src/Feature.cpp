@@ -9,7 +9,7 @@
 #include "opencv2/xfeatures2d.hpp"
 #include "spdlog/spdlog.h"
 
-#include "Room/RGBDSlam/Frame.h"
+#include "Room/Components/Frame.h"
 
 namespace room
 {

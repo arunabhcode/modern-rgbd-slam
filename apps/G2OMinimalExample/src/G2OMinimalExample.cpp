@@ -92,7 +92,6 @@ int main(int argc, char** argv)
 
     // setup the solver
     g2o::SparseOptimizer optimizer;
-    optimizer.setVerbose(true);
 
     g2o::OptimizationAlgorithmLevenberg* solver =
         new g2o::OptimizationAlgorithmLevenberg(

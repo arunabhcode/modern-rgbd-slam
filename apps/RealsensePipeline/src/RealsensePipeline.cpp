@@ -9,10 +9,10 @@
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
+#include "Room/Components/Frame.h"
+#include "Room/Components/Pose.h"
 #include "Room/RGBDSlam/Feature.h"
-#include "Room/RGBDSlam/Frame.h"
 #include "Room/RGBDSlam/Odometry.h"
-#include "Room/RGBDSlam/Pose.h"
 
 int main(int argc, char* argv[])
 {

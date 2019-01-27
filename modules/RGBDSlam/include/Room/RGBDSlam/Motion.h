@@ -5,7 +5,7 @@
 
 #include "Eigen/Core"
 
-#include "Room/RGBDSlam/Pose.h"
+#include "Room/Components/Pose.h"
 
 namespace room
 {
