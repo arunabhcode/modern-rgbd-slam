@@ -27,15 +27,14 @@ class BundleAdjustment
     ~BundleAdjustment() = default;
 
     bool AddVertex(const Frame& frame);
-    bool AddVertex(const MapPoint& mappoint, const bool marginalize);
-    bool AddEdge(int edge_id,
-                 Vertex* point,
-                 Vertex* keyframe,
-                 const MapPoint& mappoint,
-                 const Frame& frame);
+    bool AddVertex(const MapPoint& mappoint);
+    bool AddEdge(const int edge_id,
+                 const int kp_idx,
+                 const Frame& frame,
+                 Vertex* v_point,
+                 Vertex* v_frame);
     void BuildGraph(std::vector<std::shared_ptr<MapPoint>> mps,
-                    std::vector<std::shared_ptr<Frame>> frames,
-                    int n_iterations);
+                    std::vector<std::shared_ptr<Frame>> frames);
     void Run();
 
     void SetForceStopFlag(const bool& force_stop_flag);

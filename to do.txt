@@ -1,9 +1,11 @@
 TO DO:
 
+
 IMPROVEMENTS
 - Make the transform finding into a factory pattern
 - Change the orientation and position to quaterniond and vector3d from their float variants.(FUCK!!!)
-
+- Use Ceres for Local BA instead of g2o
+- change bundle adjustment to unordered map from vector
 FEATURE IMPLEMENTATION
 - Move transforms to local Pose Struct
 - Tracking and initial map formation
@@ -19,6 +21,7 @@ POTENTIAL BUGS/QUESTIONS
 - Figure out why unit quaternion rotate pt doesn't work in ICP and quaternion
 rotate pt. does.
 - How to potentially fuse map points or the associate map points across multiple frames
+- Maybe will have to add unordered_map of mappoints associated with frame into the frame class
 
 CLASS PLANNING
 - BundleAdjustment - The bundle adjustment g2o optimization/wrapper
@@ -29,7 +32,6 @@ CLASS PLANNING
 - CovisibilityGraph - Maintains co-visibility network of frames
 
 REPOSITORY PLANNING
-- Separate the base data structures into the components/underlying slam structures.
 - Separate the concurrent queues/safe queues into common/common utils.
 
 FLOW PLANNING
