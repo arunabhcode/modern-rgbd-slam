@@ -3,6 +3,7 @@
 #ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FRAME_H_
 #define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FRAME_H_
 
+#include <unordered_map>
 #include <vector>
 
 #include "Eigen/Core"
@@ -60,6 +61,8 @@ struct Frame
     float m_focal;
     Eigen::Vector2f m_pp;
     std::vector<cv::Point2f> m_keypoints;
+    std::unordered_map<int, int> m_key_v_map_points;  ///< key is kp_idx and value is global
+                                                      ///< mappoint id assigned localmapping
     cv::Mat m_descriptors;
     std::vector<float> m_depth;
 };  // struct frame

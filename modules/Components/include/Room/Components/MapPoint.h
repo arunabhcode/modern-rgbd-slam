@@ -32,7 +32,7 @@ struct MapPoint
     }
 
     int m_mappoint_id;
-    std::map<int, int> m_observations;
+    std::map<int, int> m_observations;  ///< frame id and keypoint idx
     int m_reference_frame_id;
     Eigen::Vector3f m_world_position;
     int m_visible_count;

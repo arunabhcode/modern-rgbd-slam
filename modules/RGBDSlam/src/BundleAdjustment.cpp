@@ -69,8 +69,10 @@ bool BundleAdjustment::AddVertex(const MapPoint& mappoint)
     return true;
 }
 
-bool BundleAdjustment::AddEdge(
-    const int edge_id, const int kp_idx, const Frame& frame, Vertex* v_point, Vertex* v_frame)
+bool BundleAdjustment::AddEdge(const int kp_idx,
+                               const Frame& frame,
+                               Vertex* v_point,
+                               Vertex* v_frame)
 {
     g2o::EdgeSE3ProjectXYZ* edge_se3 = new g2o::EdgeSE3ProjectXYZ();
     edge_se3->setId(edge_id);
@@ -106,6 +108,16 @@ void BundleAdjustment::BuildGraph(std::vector<std::shared_ptr<MapPoint>> mps,
     for (std::size_t j = 0; j < mps.size(); j++)
     {
         AddVertex(*mps[j]);
+        for (std::map<int, int>::const_iterator ob_it = mps[j].m_observations.begin();
+             ob_it                                    = mps[j].m_observations.end();
+             ob_it++)
+        {
+            AddEdge(ob_it->second,
+                    *frames[ob_it->first],
+                    dynamic_cast<g2o::OptimizableGraph::Vertex*>(optimizer.vertex(
+                        frames.size() + j + 1)),  // +1 because both frame count and j start from 0
+                    dynamic_cast<g2o::OptimizableGraph::Vertex*>(optimizer.vertex(ob_it->first)));
+        }
     }
 }
 

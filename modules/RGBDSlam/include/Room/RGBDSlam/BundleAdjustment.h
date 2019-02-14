@@ -28,11 +28,7 @@ class BundleAdjustment
 
     bool AddVertex(const Frame& frame);
     bool AddVertex(const MapPoint& mappoint);
-    bool AddEdge(const int edge_id,
-                 const int kp_idx,
-                 const Frame& frame,
-                 Vertex* v_point,
-                 Vertex* v_frame);
+    bool AddEdge(const int kp_idx, const Frame& frame, Vertex* v_point, Vertex* v_frame);
     void BuildGraph(std::vector<std::shared_ptr<MapPoint>> mps,
                     std::vector<std::shared_ptr<Frame>> frames);
     void Run();
