@@ -26,6 +26,7 @@ struct Frame
         , m_depth_img(cv::Mat())
         , m_focal(0.0f)
         , m_pp(Eigen::Vector2f(0.0f, 0.0f))
+        , m_features_found(false)
     {
     }
     Frame(const int id,
@@ -40,6 +41,8 @@ struct Frame
         , m_depth_img(depth)
         , m_focal(focal)
         , m_pp(pp)
+        , m_features_found(false)
+
     {
     }
 
@@ -61,10 +64,12 @@ struct Frame
     float m_focal;
     Eigen::Vector2f m_pp;
     std::vector<cv::Point2f> m_keypoints;
+    std::vector<cv::KeyPoint> m_features;
     std::unordered_map<int, int> m_key_v_map_points;  ///< key is kp_idx and value is global
                                                       ///< mappoint id assigned localmapping
     cv::Mat m_descriptors;
     std::vector<float> m_depth;
+    bool m_features_found;
 };  // struct frame
 
 }  // namespace room
