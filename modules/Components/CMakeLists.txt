@@ -7,8 +7,6 @@ ${PROJECT_SOURCE_DIR}/include/Room/Components/Frame.h
 ${PROJECT_SOURCE_DIR}/include/Room/Components/MapPoint.h
 )
 
-source_group("include" FILES ${PROJECT_INCS})
-
 find_package(OpenCV REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(Eigen3 REQUIRED)

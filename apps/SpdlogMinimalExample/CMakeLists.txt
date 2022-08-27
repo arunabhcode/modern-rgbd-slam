@@ -6,8 +6,6 @@ find_package(spdlog REQUIRED)
 
 set(PROJECT_SRCS ${PROJECT_SOURCE_DIR}/src/SpdlogMinimalExample.cpp)
 
-source_group("src" FILES ${PROJECT_SRCS})
-
 add_executable(${PROJECT_NAME} ${PROJECT_SRCS})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog)

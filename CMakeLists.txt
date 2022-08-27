@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(realsense-rgbd-slam LANGUAGES CXX)
+project(modern-rgbd-slam LANGUAGES CXX)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)

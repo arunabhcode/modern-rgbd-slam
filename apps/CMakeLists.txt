@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(apps)
 
-add_subdirectory(RealsenseMinimalExample)
 add_subdirectory(SpdlogMinimalExample)
 add_subdirectory(SophusMinimalExample)
 add_subdirectory(JSONMinimalExample)
-add_subdirectory(RealsensePipeline)
+add_subdirectory(SlamPipeline)
 add_subdirectory(CxxoptsMinimalExample)
 add_subdirectory(EigenMinimalExample)
 add_subdirectory(CeresMinimalExample)
