@@ -5,6 +5,7 @@ set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/Components/Pose.h
 ${PROJECT_SOURCE_DIR}/include/Components/Frame.h
 ${PROJECT_SOURCE_DIR}/include/Components/MapPoint.h
+${PROJECT_SOURCE_DIR}/include/Components/Map.h
 )
 
 find_package(OpenCV REQUIRED)

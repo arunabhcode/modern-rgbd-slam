@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(room_rgbdslam)
+project(rgbdslam)
 
 
 set(PROJECT_SRCS
@@ -11,10 +11,10 @@ ${PROJECT_SOURCE_DIR}/src/Motion.cpp
 )
 
 set(PROJECT_INCS
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Feature.h
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Odometry.h
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/ICP.h
-${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/Motion.h
+${PROJECT_SOURCE_DIR}/include/RGBDSlam/Feature.h
+${PROJECT_SOURCE_DIR}/include/RGBDSlam/Odometry.h
+${PROJECT_SOURCE_DIR}/include/RGBDSlam/ICP.h
+${PROJECT_SOURCE_DIR}/include/RGBDSlam/Motion.h
 # ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/BundleAdjustment.h
 )
 
@@ -62,13 +62,13 @@ install(TARGETS ${PROJECT_NAME}
         LIBRARY DESTINATION lib COMPONENT install-app
         RUNTIME DESTINATION bin COMPONENT install-app)
 
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam
-        DESTINATION include/Room/RGBDSlam
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/RGBDSlam
+        DESTINATION include/RGBDSlam
         FILES_MATCHING PATTERN "*.h")
 
-export(TARGETS ${PROJECT_NAME} NAMESPACE room::
+export(TARGETS ${PROJECT_NAME} NAMESPACE rgbd_slam::
       APPEND FILE ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Targets.cmake)
 
 file(APPEND
     ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
-"set(ROOM_RGBDSLAM_LIBRARIES \${ROOM_RGBDSLAM_LIBRARIES} ${PROJECT_NAME})\n")
+"set(RGBDSLAM_LIBRARIES \${RGBDSLAM_LIBRARIES} ${PROJECT_NAME})\n")
