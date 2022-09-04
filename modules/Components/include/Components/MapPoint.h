@@ -1,7 +1,7 @@
 // Copyright 2019 Arunabh Sharma
 
-#ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_MAPPOINT_H_
-#define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_MAPPOINT_H_
+#ifndef MODULES_COMPONENTS_INCLUDE_COMPONENTS_MAPPOINT_H_
+#define MODULES_COMPONENTS_INCLUDE_COMPONENTS_MAPPOINT_H_
 
 #include <unordered_map>
 
@@ -18,26 +18,26 @@ struct MapPoint
            const int& frame_id,
            const int& keypoint_idx,
            const Eigen::Vector3f& world_position)
-      : m_mappoint_id(mappoint_id)
-      , m_reference_frame_id(frame_id)
-      , m_world_position(world_position)
-      , m_visible_count(1)
+      : mappoint_id_(mappoint_id)
+      , reference_frame_id_(frame_id)
+      , world_position_(world_position)
+      , visible_count_(1)
   {
-    m_observations[frame_id] = keypoint_idx;
+    observations_[frame_id] = keypoint_idx;
   }
   void AddObservation(const int& frame_id, const int& keypoint_idx)
   {
-    m_observations[frame_id] = keypoint_idx;
-    m_visible_count++;
+    observations_[frame_id] = keypoint_idx;
+    visible_count_++;
   }
 
-  int m_mappoint_id;
-  std::unordered_map<int, int> m_observations;  ///< frame id and keypoint idx
-  int m_reference_frame_id;
-  Eigen::Vector3f m_world_position;
-  int m_visible_count;
+  int mappoint_id_;
+  std::unordered_map<int, int> observations_;  ///< frame id and keypoint idx
+  int reference_frame_id_;
+  Eigen::Vector3f world_position_;
+  int visible_count_;
 };  // struct mappoint
 
 }  // namespace slam
 
-#endif  // MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_MAPPOINT_H_
+#endif  // MODULES_COMPONENTS_INCLUDE_COMPONENTS_MAPPOINT_H_

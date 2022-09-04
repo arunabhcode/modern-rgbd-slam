@@ -1,7 +1,7 @@
 // Copyright 2019 Arunabh Sharma
 
-#ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FRAME_H_
-#define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FRAME_H_
+#ifndef MODULES_COMPONENTS_INCLUDE_COMPONENTS_FRAME_H_
+#define MODULES_COMPONENTS_INCLUDE_COMPONENTS_FRAME_H_
 
 #include <unordered_map>
 #include <vector>
@@ -18,14 +18,14 @@ struct Frame
   ~Frame() = default;
 
   explicit Frame(const int id)
-      : m_frame_id(id)
-      , m_pose(Pose())
-      , m_timestamp(0)
-      , m_color_img(cv::Mat())
-      , m_depth_img(cv::Mat())
-      , m_focal(0.0f)
-      , m_pp(Eigen::Vector2f(0.0f, 0.0f))
-      , m_features_found(false)
+      : frame_id_(id)
+      , pose_(Pose())
+      , timestamp_(0)
+      , color_img_(cv::Mat())
+      , depth_img_(cv::Mat())
+      , focal_(0.0f)
+      , pp_(Eigen::Vector2f(0.0f, 0.0f))
+      , features_found_(false)
   {
   }
   Frame(const int id,
@@ -34,13 +34,13 @@ struct Frame
         const cv::Mat& depth,
         const float focal,
         const Eigen::Vector2f& pp)
-      : m_frame_id(id)
-      , m_timestamp(timestamp)
-      , m_color_img(color)
-      , m_depth_img(depth)
-      , m_focal(focal)
-      , m_pp(pp)
-      , m_features_found(false)
+      : frame_id_(id)
+      , timestamp_(timestamp)
+      , color_img_(color)
+      , depth_img_(depth)
+      , focal_(focal)
+      , pp_(pp)
+      , features_found_(false)
 
   {
   }
@@ -48,30 +48,30 @@ struct Frame
   cv::Mat ToIntrinsicsMat()
   {
     cv::Mat intrinsics         = cv::Mat::eye(3, 3, CV_32FC1);
-    intrinsics.at<float>(0, 0) = m_focal;
-    intrinsics.at<float>(1, 1) = m_focal;
-    intrinsics.at<float>(0, 2) = m_pp[0];
-    intrinsics.at<float>(1, 2) = m_pp[1];
+    intrinsics.at<float>(0, 0) = focal_;
+    intrinsics.at<float>(1, 1) = focal_;
+    intrinsics.at<float>(0, 2) = pp_[0];
+    intrinsics.at<float>(1, 2) = pp_[1];
     return intrinsics;
   }
 
-  int m_frame_id;
-  Pose m_pose;
-  uint64_t m_timestamp;
-  cv::Mat m_color_img;
-  cv::Mat m_depth_img;
-  float m_focal;
-  Eigen::Vector2f m_pp;
-  std::vector<cv::Point2f> m_keypoints;
-  std::vector<cv::KeyPoint> m_features;
+  int frame_id_;
+  Pose pose_;
+  uint64_t timestamp_;
+  cv::Mat color_img_;
+  cv::Mat depth_img_;
+  float focal_;
+  Eigen::Vector2f pp_;
+  std::vector<cv::Point2f> keypoints_;
+  std::vector<cv::KeyPoint> features_;
   std::unordered_map<int, int>
-      m_key_v_map_points;  ///< key is kp_idx and value is global
-                           ///< mappoint id assigned localmapping
-  cv::Mat m_descriptors;
-  std::vector<float> m_depth;
-  bool m_features_found;
+      key_v_map_points_;  ///< key is kp_idx and value is global
+                          ///< mappoint id assigned localmapping
+  cv::Mat descriptors_;
+  std::vector<float> depth_;
+  bool features_found_;
 };  // struct frame
 
 }  // namespace slam
 
-#endif  // MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FRAME_H_
+#endif  // MODULES_COMPONENTS_INCLUDE_COMPONENTS_FRAME_H_
