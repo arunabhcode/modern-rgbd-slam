@@ -1,6 +1,6 @@
 // Copyright 2018 Arunabh Sharma
 
-#include "Room/RGBDSlam/ICP.h"
+#include "RGBDSlam/ICP.h"
 
 namespace room
 {

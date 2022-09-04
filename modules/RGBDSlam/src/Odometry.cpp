@@ -1,20 +1,21 @@
 // Copyright 2018 Arunabh Sharma
 
-#include "Room/RGBDSlam/Odometry.h"
+#include "RGBDSlam/Odometry.h"
 
 #include <memory>
 #include <string>
 #include <vector>
 
-// #include "ceres/ceres.h"
+#include "Components/Frame.h"
+#include "Components/Pose.h"
 #include "Eigen/Core"
-#include "Room/Components/Frame.h"
-#include "Room/Components/Pose.h"
-#include "Room/RGBDSlam/ICP.h"
 #include "ceres/ceres.h"
 #include "opencv2/opencv.hpp"
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
+
+//
+#include "RGBDSlam/ICP.h"
 
 namespace room
 {

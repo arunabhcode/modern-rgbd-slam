@@ -1,17 +1,17 @@
 // Copyright 2018 Arunabh Sharma
 
-#include "Room/RGBDSlam/Feature.h"
+#include "RGBDSlam/Feature.h"
 
 #include <string>
 #include <vector>
 
-#include "Room/Components/Frame.h"
+#include "Components/Frame.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/video/tracking.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #include "spdlog/spdlog.h"
 
-namespace room
+namespace slam
 {
 Feature::Feature(const std::string show_debug,
                  const int nfeatures,
@@ -24,25 +24,25 @@ Feature::Feature(const std::string show_debug,
                  const int patch_size,
                  const int fast_threshold,
                  const int num_points)
-    : m_show_debug(show_debug), m_num_points(num_points)
+    : show_debug_(show_debug), num_points_(num_points)
 {
-  m_feature_md_inst = cv::ORB::create(nfeatures,
-                                      scale_factor,
-                                      nlevels,
-                                      edge_threshold,
-                                      first_level,
-                                      WTA_K,
-                                      score_type,
-                                      patch_size,
-                                      fast_threshold);
+  feature_md_inst_ = cv::ORB::create(nfeatures,
+                                     scale_factor,
+                                     nlevels,
+                                     edge_threshold,
+                                     first_level,
+                                     WTA_K,
+                                     score_type,
+                                     patch_size,
+                                     fast_threshold);
 }
 
 void Feature::FindFeatures(Frame& frame)
 {
   std::vector<cv::KeyPoint> keypoints;
-  m_feature_md_inst->detect(frame.m_color_img, keypoints);
-  frame.m_features       = ANMS(keypoints, m_num_points);
-  frame.m_features_found = true;
+  feature_md_inst_->detect(frame.color_img_, keypoints);
+  frame.features_       = ANMS(keypoints, num_points_);
+  frame.features_found_ = true;
 }
 
 void Feature::FeatureMatch(Frame& frame0,
@@ -54,10 +54,8 @@ void Feature::FeatureMatch(Frame& frame0,
   cv::Mat descriptors_0;
   cv::Mat descriptors_1;
 
-  m_feature_md_inst->compute(
-      frame0.m_color_img, frame0.m_features, descriptors_0);
-  m_feature_md_inst->compute(
-      frame1.m_color_img, frame1.m_features, descriptors_1);
+  feature_md_inst_->compute(frame0.color_img_, frame0.features_, descriptors_0);
+  feature_md_inst_->compute(frame1.color_img_, frame1.features_, descriptors_1);
 
   std::vector<cv::DMatch> matches01;
   std::vector<cv::DMatch> good_matches;
@@ -66,10 +64,10 @@ void Feature::FeatureMatch(Frame& frame0,
       cv::DescriptorMatcher::create("BruteForce-Hamming");
   matcher->match(descriptors_0, descriptors_1, matches01);
 
-  cv::xfeatures2d::matchGMS(frame0.m_color_img.size(),
-                            frame1.m_color_img.size(),
-                            frame0.m_features,
-                            frame1.m_features,
+  cv::xfeatures2d::matchGMS(frame0.color_img_.size(),
+                            frame1.color_img_.size(),
+                            frame0.features_,
+                            frame1.features_,
                             matches01,
                             good_matches,
                             with_rotation,
@@ -84,16 +82,16 @@ void Feature::FeatureMatch(Frame& frame0,
     kp1_idxs.push_back(good_matches[i].trainIdx);
   }
 
-  cv::KeyPoint::convert(frame0.m_features, frame0.m_keypoints, kp0_idxs);
-  cv::KeyPoint::convert(frame1.m_features, frame1.m_keypoints, kp1_idxs);
+  cv::KeyPoint::convert(frame0.features_, frame0.keypoints_, kp0_idxs);
+  cv::KeyPoint::convert(frame1.features_, frame1.keypoints_, kp1_idxs);
 
-  if (m_show_debug == "ALL" || m_show_debug == "ORB_MATCHES")
+  if (show_debug_ == "ALL" || show_debug_ == "ORB_MATCHES")
   {
     cv::Mat img_matches;
-    cv::drawMatches(frame0.m_color_img,
-                    frame0.m_features,
-                    frame1.m_color_img,
-                    frame1.m_features,
+    cv::drawMatches(frame0.color_img_,
+                    frame0.features_,
+                    frame1.color_img_,
+                    frame1.features_,
                     good_matches,
                     img_matches,
                     cv::Scalar::all(-1),
@@ -113,7 +111,7 @@ void Feature::FeatureTrack(Frame& frame0,
                            const int max_level,
                            std::vector<int>& kps_idx_track)
 {
-  if (!frame0.m_features_found)
+  if (!frame0.features_found_)
   {
     spdlog::warn("The previous frame doesn't have keypoints.");
     FindFeatures(frame0);
@@ -122,18 +120,18 @@ void Feature::FeatureTrack(Frame& frame0,
   std::vector<unsigned char> kps_status_track_1;
   std::vector<float> kps_error_track_1;
   std::vector<cv::DMatch> good_matches;
-  cv::KeyPoint::convert(frame0.m_features, frame0.m_keypoints);
+  cv::KeyPoint::convert(frame0.features_, frame0.keypoints_);
 
-  cv::calcOpticalFlowPyrLK(frame0.m_color_img,
-                           frame1.m_color_img,
-                           frame0.m_keypoints,
-                           frame1.m_keypoints,
+  cv::calcOpticalFlowPyrLK(frame0.color_img_,
+                           frame1.color_img_,
+                           frame0.keypoints_,
+                           frame1.keypoints_,
                            kps_status_track_1,
                            kps_error_track_1,
                            win_size,
                            max_level);
-  cv::KeyPoint::convert(frame1.m_keypoints, frame1.m_features);
-  for (std::size_t i = 0; i < frame1.m_keypoints.size(); i++)
+  cv::KeyPoint::convert(frame1.keypoints_, frame1.features_);
+  for (std::size_t i = 0; i < frame1.keypoints_.size(); i++)
   {
     if (kps_status_track_1[i] == 1)
     {
@@ -143,13 +141,13 @@ void Feature::FeatureTrack(Frame& frame0,
     }
   }
 
-  if (m_show_debug == "ALL" || m_show_debug == "OPTICAL_FLOW")
+  if (show_debug_ == "ALL" || show_debug_ == "OPTICAL_FLOW")
   {
     cv::Mat img_matches;
-    cv::drawMatches(frame0.m_color_img,
-                    frame0.m_features,
-                    frame1.m_color_img,
-                    frame1.m_features,
+    cv::drawMatches(frame0.color_img_,
+                    frame0.features_,
+                    frame1.color_img_,
+                    frame1.features_,
                     good_matches,
                     img_matches,
                     cv::Scalar::all(-1),
@@ -195,4 +193,4 @@ std::vector<cv::KeyPoint> Feature::ANMS(std::vector<cv::KeyPoint> keypoints,
 
   return kp;
 }
-}  // namespace room
+}  // namespace slam

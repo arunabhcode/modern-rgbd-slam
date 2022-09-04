@@ -4,17 +4,19 @@ project(rgbdslam)
 
 set(PROJECT_SRCS
 ${PROJECT_SOURCE_DIR}/src/Feature.cpp
-${PROJECT_SOURCE_DIR}/src/Odometry.cpp
-${PROJECT_SOURCE_DIR}/src/ICP.cpp
-${PROJECT_SOURCE_DIR}/src/Motion.cpp
+${PROJECT_SOURCE_DIR}/src/Track.cpp
+# ${PROJECT_SOURCE_DIR}/src/Odometry.cpp
+# ${PROJECT_SOURCE_DIR}/src/ICP.cpp
+# ${PROJECT_SOURCE_DIR}/src/Motion.cpp
 # ${PROJECT_SOURCE_DIR}/src/BundleAdjustment.cpp
 )
 
 set(PROJECT_INCS
 ${PROJECT_SOURCE_DIR}/include/RGBDSlam/Feature.h
-${PROJECT_SOURCE_DIR}/include/RGBDSlam/Odometry.h
-${PROJECT_SOURCE_DIR}/include/RGBDSlam/ICP.h
-${PROJECT_SOURCE_DIR}/include/RGBDSlam/Motion.h
+${PROJECT_SOURCE_DIR}/include/RGBDSlam/Track.h
+# ${PROJECT_SOURCE_DIR}/include/RGBDSlam/Odometry.h
+# ${PROJECT_SOURCE_DIR}/include/RGBDSlam/ICP.h
+# ${PROJECT_SOURCE_DIR}/include/RGBDSlam/Motion.h
 # ${PROJECT_SOURCE_DIR}/include/Room/RGBDSlam/BundleAdjustment.h
 )
 
@@ -54,7 +56,7 @@ target_link_libraries(${PROJECT_NAME}
                       ceres
                       g2o::types_sba
                       g2o::solver_eigen
-                      room_components)
+                      components)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${CMAKE_PROJECT_NAME}Targets

@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "Room/Components/Frame.h"
-#include "Room/Components/Pose.h"
+#include "Components/Frame.h"
+#include "Components/Pose.h"
 #include "opencv2/opencv.hpp"
 
 namespace room

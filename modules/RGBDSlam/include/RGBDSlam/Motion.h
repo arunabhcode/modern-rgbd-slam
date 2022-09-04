@@ -3,8 +3,8 @@
 #ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_MOTION_H_
 #define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_MOTION_H_
 
+#include "Components/Pose.h"
 #include "Eigen/Core"
-#include "Room/Components/Pose.h"
 
 namespace room
 {

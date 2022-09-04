@@ -1,15 +1,15 @@
 // Copyright 2018 Arunabh Sharma
 
-#ifndef MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FEATURE_H_
-#define MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FEATURE_H_
+#ifndef MODULES_RGBDSLAM_INCLUDE_RGBDSLAM_FEATURE_H_
+#define MODULES_RGBDSLAM_INCLUDE_RGBDSLAM_FEATURE_H_
 
 #include <string>
 #include <vector>
 
-#include "Room/Components/Frame.h"
+#include "Components/Frame.h"
 #include "opencv2/opencv.hpp"
 
-namespace room
+namespace slam
 {
 class Feature
 {
@@ -46,10 +46,10 @@ class Feature
                                  int num_points);
 
  private:
-  std::string m_show_debug;
-  cv::Ptr<cv::Feature2D> m_feature_md_inst;
-  int m_num_points;
+  std::string show_debug_;
+  cv::Ptr<cv::Feature2D> feature_md_inst_;
+  int num_points_;
 };  // class feature
-}  // namespace room
+}  // namespace slam
 
-#endif  // MODULES_RGBDSLAM_INCLUDE_ROOM_RGBDSLAM_FEATURE_H_
+#endif  // MODULES_RGBDSLAM_INCLUDE_RGBDSLAM_FEATURE_H_
