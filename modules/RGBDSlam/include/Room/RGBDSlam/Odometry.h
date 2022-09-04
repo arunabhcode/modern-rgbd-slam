@@ -6,26 +6,26 @@
 #include <string>
 #include <vector>
 
-#include "opencv2/opencv.hpp"
-
 #include "Room/Components/Frame.h"
 #include "Room/Components/Pose.h"
+#include "opencv2/opencv.hpp"
 
 namespace room
 {
 class Odometry
 {
-   public:
-    Odometry() = delete;
-    explicit Odometry(const std::string show_debug);
-    ~Odometry() = default;
+ public:
+  Odometry() = delete;
+  explicit Odometry(const std::string show_debug);
+  ~Odometry() = default;
 
-    Pose PoseEstimationICP(Frame& frame0,
-                           Frame& frame1,
-                           Pose initial_pose = Pose());
+  Pose PoseEstimationICP(Frame& frame0,
+                         Frame& frame1,
+                         std::vector<int>& matches,
+                         Pose initial_pose = Pose());
 
-   private:
-    std::string m_show_debug;
+ private:
+  std::string m_show_debug;
 };  // class odometry
 }  // namespace room
 

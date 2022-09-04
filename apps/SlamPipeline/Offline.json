@@ -12,5 +12,5 @@
    "with_scale"                : true,
    "threshold_factor"          : 6.0,
    "num_points"                : 10,
-   "show_debug"                : "OPTICAL_FLOW"
+   "show_debug"                : "ALL"
 }
