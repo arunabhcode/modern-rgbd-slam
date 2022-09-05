@@ -13,36 +13,27 @@
 
 namespace slam
 {
-Feature::Feature(const std::string show_debug,
-                 const int nfeatures,
-                 const float scale_factor,
-                 const int nlevels,
-                 const int edge_threshold,
-                 const int first_level,
-                 const int WTA_K,
-                 const cv::ORB::ScoreType score_type,
-                 const int patch_size,
-                 const int fast_threshold,
-                 const int num_points)
-    : show_debug_(show_debug), num_points_(num_points)
+void Feature::Configure(const SlamParams& params)
 {
-  feature_md_inst_ = cv::ORB::create(nfeatures,
-                                     scale_factor,
-                                     nlevels,
-                                     edge_threshold,
-                                     first_level,
-                                     WTA_K,
-                                     score_type,
-                                     patch_size,
-                                     fast_threshold);
+  params_inst_     = params;
+  feature_md_inst_ = cv::ORB::create(params.nfeatures_,
+                                     params.scale_factor_,
+                                     params.nlevels_,
+                                     params.edge_threshold_,
+                                     params.first_level_,
+                                     params.WTA_K_,
+                                     params.score_type_,
+                                     params.patch_size_,
+                                     params.fast_threshold_);
 }
 
-void Feature::FindFeatures(Frame& frame)
+bool Feature::FindFeatures(Frame& frame)
 {
   std::vector<cv::KeyPoint> keypoints;
-  feature_md_inst_->detect(frame.color_img_, keypoints);
+  feature_md_inst_->detect(frame.undist_color_img_, keypoints);
   frame.features_       = ANMS(keypoints, num_points_);
   frame.features_found_ = true;
+  return frame.features_found_;
 }
 
 void Feature::FeatureMatch(Frame& frame0,
@@ -85,7 +76,8 @@ void Feature::FeatureMatch(Frame& frame0,
   cv::KeyPoint::convert(frame0.features_, frame0.keypoints_, kp0_idxs);
   cv::KeyPoint::convert(frame1.features_, frame1.keypoints_, kp1_idxs);
 
-  if (show_debug_ == "ALL" || show_debug_ == "ORB_MATCHES")
+  if (params_inst_.show_debug_ == "ALL" ||
+      params_inst_.show_debug_ == "ORB_MATCHES")
   {
     cv::Mat img_matches;
     cv::drawMatches(frame0.color_img_,
@@ -141,7 +133,8 @@ void Feature::FeatureTrack(Frame& frame0,
     }
   }
 
-  if (show_debug_ == "ALL" || show_debug_ == "OPTICAL_FLOW")
+  if (params_inst_.show_debug_ == "ALL" ||
+      params_inst_.show_debug_ == "OPTICAL_FLOW")
   {
     cv::Mat img_matches;
     cv::drawMatches(frame0.color_img_,
@@ -193,4 +186,5 @@ std::vector<cv::KeyPoint> Feature::ANMS(std::vector<cv::KeyPoint> keypoints,
 
   return kp;
 }
+
 }  // namespace slam

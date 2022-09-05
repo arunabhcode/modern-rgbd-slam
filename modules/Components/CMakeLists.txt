@@ -6,6 +6,8 @@ ${PROJECT_SOURCE_DIR}/include/Components/Pose.h
 ${PROJECT_SOURCE_DIR}/include/Components/Frame.h
 ${PROJECT_SOURCE_DIR}/include/Components/MapPoint.h
 ${PROJECT_SOURCE_DIR}/include/Components/Map.h
+${PROJECT_SOURCE_DIR}/include/Components/Params.h
+${PROJECT_SOURCE_DIR}/include/Components/Camera.h
 )
 
 find_package(OpenCV REQUIRED)

@@ -3,7 +3,9 @@
 #ifndef MODULES_RGBDSLAM_INCLUDE_RGBDSLAM_TRACK_H_
 #define MODULES_RGBDSLAM_INCLUDE_RGBDSLAM_TRACK_H_
 
+#include "Components/Camera.h"
 #include "Components/Frame.h"
+#include "Components/Map.h"
 #include "Eigen/Core"
 
 //
@@ -17,18 +19,24 @@ class Track
   Track()  = default;
   ~Track() = default;
 
+  void Configure(const SlamParams& params);
+
+  void UndistortFrames(Frame& frame);
+
   /**
-   * @brief      Initializes the map points for the first frame which are then
-   *             later added to the map
+   * @brief      Initializes the map points for the first frame which are
+   * then later added to the map
    *
    * @param      frame  First frame
    *
    * @return     Whether initialization succeeded or not
    */
-  bool Initialize(Frame& frame);
+  bool Initialize(Frame& frame, Map& map);
 
  private:
-  // Feature feature_inst_;
+  Feature feature_inst_;
+  SlamParams params_inst_;
+  Camera camera_inst_;
 
 };  //  class motion
 }  // namespace slam

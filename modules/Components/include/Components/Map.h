@@ -3,10 +3,12 @@
 #ifndef MODULES_COMPONENTS_INCLUDE_COMPONENTS_MAP_H_
 #define MODULES_COMPONENTS_INCLUDE_COMPONENTS_MAP_H_
 
+#include <algorithm>
 #include <unordered_map>
 
+#include "Components/Frame.h"
+#include "Components/MapPoint.h"
 #include "Eigen/Core"
-#include
 
 namespace slam
 {
@@ -38,7 +40,7 @@ struct Map
   }
 
   bool initialized;
-  std::vector<MapPoints> points_;
+  std::vector<MapPoint> points_;
   std::vector<Frame> keyframes_;
 };  // struct map
 

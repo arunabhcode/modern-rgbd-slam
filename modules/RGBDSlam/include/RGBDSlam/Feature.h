@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Components/Frame.h"
+#include "Components/Params.h"
 #include "opencv2/opencv.hpp"
 
 namespace slam
@@ -14,21 +15,12 @@ namespace slam
 class Feature
 {
  public:
-  Feature() = delete;
-  Feature(const std::string show_debug,
-          const int nfeatures,
-          const float scale_factor,
-          const int nlevels,
-          const int edge_threshold,
-          const int first_level,
-          const int WTA_K,
-          const cv::ORB::ScoreType score_type,
-          const int patch_size,
-          const int fast_threshold,
-          const int num_points);
+  Feature()  = default;
   ~Feature() = default;
 
-  void FindFeatures(Frame& frame);
+  void Configure(const SlamParams& params);
+
+  bool FindFeatures(Frame& frame);
 
   void FeatureMatch(Frame& frame0,
                     Frame& frame1,
@@ -47,6 +39,7 @@ class Feature
 
  private:
   std::string show_debug_;
+  SlamParams params_inst_;
   cv::Ptr<cv::Feature2D> feature_md_inst_;
   int num_points_;
 };  // class feature

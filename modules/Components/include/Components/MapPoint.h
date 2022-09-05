@@ -17,10 +17,10 @@ struct MapPoint
   MapPoint(const int& mappoint_id,
            const int& frame_id,
            const int& keypoint_idx,
-           const Eigen::Vector3f& world_position)
+           const Eigen::Vector3f& position)
       : mappoint_id_(mappoint_id)
       , reference_frame_id_(frame_id)
-      , world_position_(world_position)
+      , position_(position)
       , visible_count_(1)
   {
     observations_[frame_id] = keypoint_idx;
@@ -31,10 +31,15 @@ struct MapPoint
     visible_count_++;
   }
 
+  bool operator==(const MapPoint& rhs) const
+  {
+    return mappoint_id_ == rhs.mappoint_id_;
+  }
+
   int mappoint_id_;
   std::unordered_map<int, int> observations_;  ///< frame id and keypoint idx
   int reference_frame_id_;
-  Eigen::Vector3f world_position_;
+  Eigen::Vector3f position_;
   int visible_count_;
 };  // struct mappoint
 

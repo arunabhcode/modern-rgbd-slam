@@ -6,6 +6,7 @@ IMPROVEMENTS
 - Change the orientation and position to quaterniond and vector3d from their float variants.(FUCK!!!)
 - Use Ceres for Local BA instead of g2o
 - change bundle adjustment to unordered map from vector
+- Use individual point undistorting instead of whole image undistorting that I'm using right now since opencv undistortPoints is broken
 FEATURE IMPLEMENTATION
 - Move transforms to local Pose Struct
 - Tracking and initial map formation
