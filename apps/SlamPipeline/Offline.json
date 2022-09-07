@@ -11,6 +11,6 @@
    "with_rotation"             : true,
    "with_scale"                : true,
    "threshold_factor"          : 6.0,
-   "num_points"                : 10,
+   "num_points"                : 20,
    "show_debug"                : "ALL"
 }

@@ -3,6 +3,7 @@
 #include "RGBDSlam/Track.h"
 
 #include "opencv2/opencv.hpp"
+#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
 namespace slam
@@ -31,20 +32,29 @@ bool Track::Initialize(Frame& frame, Map& map)
   UndistortFrames(frame);
   if (!feature_inst_.FindFeatures(frame))
   {
-    SPDLOG_ERROR("ORB Features not found in current frame");
+    SPDLOG_ERROR("Features not found in current frame");
     return false;
   }
-  for (std::size_t i = 0; i < frame.keypoints_.size(); ++i)
+  for (std::size_t i = 0; i < frame.features_.size(); ++i)
   {
-    float Z = frame.undist_depth_img_.at<float>(frame.keypoints_[i].x,
-                                                frame.keypoints_[i].y);
-    float X =
-        (frame.keypoints_[i].x - camera_inst_.pp_.x) / camera_inst_.focal_ * Z;
-    float Y =
-        (frame.keypoints_[i].x - camera_inst_.pp_.x) / camera_inst_.focal_ * Z;
-
-    map.AddMapPoint(MapPoint(i, 0, i, Eigen::Vector3f(X, Y, Z)));
+    float Z = frame.undist_depth_img_.at<float>(frame.features_[i].pt.x,
+                                                frame.features_[i].pt.y);
+    if (Z > 0.0f)
+    {
+      float X = (frame.features_[i].pt.x - camera_inst_.pp_.x) /
+                camera_inst_.focal_ * Z;
+      float Y = (frame.features_[i].pt.x - camera_inst_.pp_.x) /
+                camera_inst_.focal_ * Z;
+      SPDLOG_INFO("Feature x = {}, y = {}",
+                  frame.features_[i].pt.x,
+                  frame.features_[i].pt.y);
+      SPDLOG_INFO("X = {}, Y = {}, Z = {}", X, Y, Z);
+      map.AddMapPoint(MapPoint(i, 0, i, Eigen::Vector3f(X, Y, Z)));
+    }
   }
+  map.AddKeyFrame(frame);
+  map.initialized_ = true;
+  SPDLOG_INFO("Map = {}", map);
   return true;
 }
 

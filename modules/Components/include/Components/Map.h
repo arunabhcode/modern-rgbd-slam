@@ -4,6 +4,7 @@
 #define MODULES_COMPONENTS_INCLUDE_COMPONENTS_MAP_H_
 
 #include <algorithm>
+#include <iostream>
 #include <unordered_map>
 
 #include "Components/Frame.h"
@@ -39,10 +40,19 @@ struct Map
                   points_.end());
   }
 
-  bool initialized;
+  bool initialized_;
   std::vector<MapPoint> points_;
   std::vector<Frame> keyframes_;
 };  // struct map
+
+inline std::ostream& operator<<(std::ostream& os, const Map& map)
+{
+  os << "Is map initialized = " << map.initialized_ << std::endl;
+  os << "Number of points = " << map.points_.size() << std::endl;
+  os << "Number of frames = " << map.keyframes_.size() << std::endl;
+
+  return os;
+}
 
 }  // namespace slam
 

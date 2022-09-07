@@ -6,7 +6,7 @@ set(PROJECT_SRCS ${PROJECT_SOURCE_DIR}/src/SlamPipeline.cpp)
 
 add_executable(${PROJECT_NAME} ${PROJECT_SRCS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC room_rgbdslam)
+target_link_libraries(${PROJECT_NAME} PUBLIC rgbdslam)
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER ${CMAKE_PROJECT_NAME}/apps)
 

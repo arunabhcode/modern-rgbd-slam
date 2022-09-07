@@ -9,6 +9,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/video/tracking.hpp"
 #include "opencv2/xfeatures2d.hpp"
+#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
 namespace slam
@@ -31,7 +32,9 @@ bool Feature::FindFeatures(Frame& frame)
 {
   std::vector<cv::KeyPoint> keypoints;
   feature_md_inst_->detect(frame.undist_color_img_, keypoints);
-  frame.features_       = ANMS(keypoints, num_points_);
+  SPDLOG_TRACE("Number of keypoints = {}", keypoints.size());
+  frame.features_ = ANMS(keypoints, params_inst_.num_points_);
+  SPDLOG_TRACE("Number of features = {}", frame.features_.size());
   frame.features_found_ = true;
   return frame.features_found_;
 }

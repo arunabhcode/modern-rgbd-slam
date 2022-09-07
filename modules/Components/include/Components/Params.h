@@ -5,6 +5,8 @@
 
 #include "opencv2/opencv.hpp"
 
+namespace slam
+{
 struct SlamParams
 {
   /// Camera intrinsic params
@@ -25,5 +27,5 @@ struct SlamParams
   int fast_threshold_;
   int num_points_;
 };
-
+}  // namespace slam
 #endif  // MODULES_COMPONENTS_INCLUDE_COMPONENTS_PARAMS_H_
